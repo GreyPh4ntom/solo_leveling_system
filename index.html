@@ -3,678 +3,693 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOLO LEVELING SYSTEM | PROTOCOL v3.0</title>
+    <title>SOLO LEVELING SYSTEM | PROTOCOL v4.0</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        
         :root {
-            --system-blue: #00d4ff; --system-glow: rgba(0, 212, 255, 0.6);
-            --system-bg: #0a0e1a; --system-panel: rgba(10, 20, 40, 0.9);
-            --system-border: rgba(0, 212, 255, 0.3); --system-text: #e0f7ff;
-            --system-dim: #5a7a8a; --alert-red: #ff0040;
-            --success-cyan: #00ffcc; --warning-orange: #ff8800;
+            --system-blue: #00f0ff;
+            --system-glow: rgba(0, 240, 255, 0.7);
+            --shadow-purple: #9d4edd;
+            --alert-red: #ff0040;
+            --success-cyan: #00ffcc;
+            --warning-orange: #ff8800;
+            --system-bg: #05080f;
+            --system-panel: rgba(8, 15, 35, 0.95);
+            --system-border: rgba(0, 240, 255, 0.25);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: 'Rajdhani', sans-serif;
             background: var(--system-bg);
-            color: var(--system-text);
+            color: #e0f7ff;
             min-height: 100vh;
             overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(157, 78, 221, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, #05080f 0%, #0a0f1f 100%);
         }
-        .system-frame { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 1000; }
-        .frame-corner { position: absolute; width: 60px; height: 60px; border: 2px solid var(--system-blue); }
-        .frame-corner.tl { top: 20px; left: 20px; border-right: none; border-bottom: none; box-shadow: -2px -2px 10px var(--system-glow); }
-        .frame-corner.tr { top: 20px; right: 20px; border-left: none; border-bottom: none; box-shadow: 2px -2px 10px var(--system-glow); }
-        .frame-corner.bl { bottom: 20px; left: 20px; border-right: none; border-top: none; box-shadow: -2px 2px 10px var(--system-glow); }
-        .frame-corner.br { bottom: 20px; right: 20px; border-left: none; border-top: none; box-shadow: 2px 2px 10px var(--system-glow); }
-        .scan-lines { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 212, 255, 0.03) 2px, rgba(0, 212, 255, 0.03) 4px); pointer-events: none; z-index: 999; animation: scanMove 10s linear infinite; }
-        @keyframes scanMove { 0% { transform: translateY(0); } 100% { transform: translateY(4px); } }
-        .system-header { background: linear-gradient(90deg, transparent 0%, rgba(0, 212, 255, 0.1) 20%, rgba(0, 212, 255, 0.2) 50%, rgba(0, 212, 255, 0.1) 80%, transparent 100%); border-bottom: 1px solid var(--system-border); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: relative; }
-        .system-header::before { content: ''; position: absolute; bottom: -1px; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg, transparent, var(--system-blue), transparent); box-shadow: 0 0 10px var(--system-glow); }
-        .hunter-info { display: flex; align-items: center; gap: 20px; }
-        .hunter-avatar { width: 50px; height: 50px; border: 2px solid var(--system-blue); border-radius: 50%; background: rgba(0, 212, 255, 0.1); display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); position: relative; }
-        .hunter-avatar::after { content: ''; position: absolute; inset: -5px; border: 1px solid var(--system-blue); border-radius: 50%; opacity: 0.5; animation: pulseRing 2s infinite; }
-        @keyframes pulseRing { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 0; } }
-        .hunter-details h1 { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--system-blue); text-shadow: 0 0 10px var(--system-glow); }
-        .hunter-title { font-size: 0.85rem; color: var(--system-dim); letter-spacing: 1px; }
-        .system-resources { display: flex; gap: 20px; align-items: center; }
-        .resource-box { display: flex; align-items: center; gap: 8px; background: rgba(0, 20, 40, 0.6); border: 1px solid var(--system-border); padding: 8px 15px; border-radius: 4px; position: relative; overflow: hidden; }
-        .resource-box::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent); animation: resourceShine 3s infinite; }
-        @keyframes resourceShine { 0% { left: -100%; } 50%, 100% { left: 100%; } }
-        .resource-icon { font-size: 1.2rem; filter: drop-shadow(0 0 5px var(--system-glow)); }
-        .resource-value { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--system-blue); }
-        .resource-label { font-size: 0.7rem; color: var(--system-dim); text-transform: uppercase; letter-spacing: 1px; }
-        .phase-indicator { position: fixed; top: 80px; right: 30px; background: rgba(0, 0, 0, 0.8); border: 1px solid var(--system-border); padding: 10px 20px; border-radius: 20px; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; letter-spacing: 2px; z-index: 100; }
-        .main-container { max-width: 1400px; margin: 0 auto; padding: 30px; display: grid; grid-template-columns: 280px 1fr 380px; gap: 25px; position: relative; z-index: 1; }
-        .system-panel { background: var(--system-panel); border: 1px solid var(--system-border); border-radius: 8px; position: relative; overflow: hidden; backdrop-filter: blur(10px); }
-        .system-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--system-blue), transparent); box-shadow: 0 0 10px var(--system-glow); }
-        .panel-header { background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0.2) 50%, rgba(0, 212, 255, 0.1) 100%); padding: 12px 20px; border-bottom: 1px solid var(--system-border); font-family: 'Orbitron', sans-serif; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
-        .panel-header::before { content: '◆'; color: var(--system-blue); animation: diamondPulse 2s infinite; }
-        @keyframes diamondPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        .panel-content { padding: 20px; }
-        .body-visual { height: 380px; position: relative; display: flex; align-items: center; justify-content: center; }
-        .body-scan-line { position: absolute; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--system-blue), transparent); box-shadow: 0 0 10px var(--system-glow); animation: bodyScan 3s ease-in-out infinite; pointer-events: none; }
-        @keyframes bodyScan { 0%, 100% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
-        .body-part { cursor: pointer; transition: all 0.3s; filter: drop-shadow(0 0 5px currentColor); }
-        .body-part:hover { filter: drop-shadow(0 0 15px currentColor) brightness(1.3); transform: scale(1.02); }
-        .status-normal { fill: rgba(0, 212, 255, 0.3); stroke: var(--system-blue); stroke-width: 1; }
-        .status-active { fill: rgba(0, 255, 200, 0.4); stroke: var(--success-cyan); stroke-width: 2; animation: activePulse 1.5s infinite; }
-        .status-fatigue { fill: rgba(255, 136, 0, 0.3); stroke: var(--warning-orange); stroke-width: 1; }
-        .status-injured { fill: rgba(255, 0, 64, 0.3); stroke: var(--alert-red); stroke-width: 2; animation: injuredPulse 1s infinite; }
-        @keyframes activePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
-        @keyframes injuredPulse { 0%, 100% { stroke-opacity: 1; } 50% { stroke-opacity: 0.3; } }
-        .status-window { text-align: center; }
-        .level-display { margin-bottom: 20px; }
-        .level-number { font-family: 'Orbitron', sans-serif; font-size: 4.5rem; font-weight: 900; color: var(--system-blue); text-shadow: 0 0 30px var(--system-glow); line-height: 1; position: relative; display: inline-block; }
-        .level-number::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--system-blue); box-shadow: 0 0 10px var(--system-glow); }
-        .xp-bar-container { margin: 15px 0; padding: 0 20px; }
-        .xp-bar-wrapper { height: 8px; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--system-border); border-radius: 4px; overflow: hidden; position: relative; }
-        .xp-bar-fill { height: 100%; background: linear-gradient(90deg, #0066cc, var(--system-blue)); transition: width 0.5s ease; box-shadow: 0 0 10px var(--system-glow); }
-        .xp-text { font-size: 0.8rem; color: var(--system-dim); margin-top: 5px; font-family: 'Orbitron', sans-serif; }
-        .rank-title { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; color: var(--success-cyan); text-shadow: 0 0 15px rgba(0, 255, 200, 0.5); margin-bottom: 5px; letter-spacing: 3px; }
-        .job-title { font-size: 0.85rem; color: var(--system-dim); letter-spacing: 2px; margin-bottom: 25px; }
-        .resource-bars { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; padding: 0 10px; }
-        .bar-container { display: flex; align-items: center; gap: 12px; }
-        .bar-icon { font-size: 1.3rem; width: 25px; text-align: center; }
-        .bar-wrapper { flex: 1; height: 22px; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--system-border); border-radius: 3px; position: relative; overflow: hidden; }
-        .bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; position: relative; overflow: hidden; }
-        .bar-fill::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation: barShine 2s infinite; }
-        @keyframes barShine { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-        .hp-fill { background: linear-gradient(90deg, #ff0040, #ff4080); }
-        .mp-fill { background: linear-gradient(90deg, #0066cc, var(--system-blue)); }
-        .fatigue-fill { background: linear-gradient(90deg, #ff8800, #ffaa00); }
-        .bar-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Orbitron', sans-serif; font-size: 0.75rem; font-weight: 600; text-shadow: 0 0 5px rgba(0,0,0,0.8); z-index: 2; }
-        .stats-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
-        .stat-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; background: rgba(0, 20, 40, 0.4); border: 1px solid var(--system-border); border-radius: 4px; transition: all 0.3s; }
-        .stat-row:hover { background: rgba(0, 212, 255, 0.1); border-color: var(--system-blue); box-shadow: 0 0 15px rgba(0, 212, 255, 0.2); }
-        .stat-left { display: flex; align-items: center; gap: 10px; }
-        .stat-icon { font-size: 1.1rem; filter: drop-shadow(0 0 5px var(--system-glow)); }
-        .stat-name { font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; }
-        .stat-value-box { display: flex; align-items: center; gap: 6px; font-family: 'Orbitron', sans-serif; }
-        .stat-value { font-size: 1.1rem; font-weight: 700; color: var(--system-blue); }
-        .stat-bonus { font-size: 0.75rem; color: var(--success-cyan); }
-        .protocol-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--system-border); }
-        .protocol-title { font-family: 'Orbitron', sans-serif; font-size: 1rem; color: var(--system-blue); }
-        .protocol-progress { font-size: 0.8rem; color: var(--system-dim); }
-        .quest-category { margin-bottom: 15px; }
-        .category-header { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--system-dim); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-        .category-icon { font-size: 1rem; }
-        .quest-card { background: rgba(0, 10, 20, 0.6); border: 1px solid var(--system-border); border-radius: 6px; padding: 12px; position: relative; overflow: hidden; transition: all 0.3s; margin-bottom: 8px; }
-        .quest-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--system-blue); box-shadow: 0 0 10px var(--system-glow); }
-        .quest-card.completed { opacity: 0.6; border-color: var(--success-cyan); }
-        .quest-card.completed::before { background: var(--success-cyan); }
-        .quest-card.blocked { opacity: 0.4; border-color: var(--alert-red); }
-        .quest-card.blocked::before { background: var(--alert-red); }
-        .quest-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        .quest-name { font-weight: 600; font-size: 0.95rem; }
-        .quest-difficulty { font-size: 0.7rem; padding: 2px 8px; border-radius: 3px; border: 1px solid; font-family: 'Orbitron', sans-serif; }
-        .quest-desc { font-size: 0.8rem; color: var(--system-dim); margin-bottom: 8px; }
-        .quest-impact { display: flex; gap: 12px; font-size: 0.75rem; }
-        .impact-item { display: flex; align-items: center; gap: 4px; }
-        .impact-positive { color: var(--success-cyan); }
-        .impact-negative { color: var(--alert-red); }
-        .quest-actions { display: flex; gap: 8px; margin-top: 10px; }
-        .btn-system { flex: 1; padding: 8px; background: rgba(0, 212, 255, 0.1); border: 1px solid var(--system-border); color: var(--system-blue); font-family: 'Orbitron', sans-serif; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
-        .btn-system:hover:not(:disabled) { background: rgba(0, 212, 255, 0.2); border-color: var(--system-blue); box-shadow: 0 0 15px var(--system-glow); }
-        .btn-system:disabled { opacity: 0.5; cursor: not-allowed; }
-        .btn-system.complete { background: rgba(0, 255, 200, 0.2); border-color: var(--success-cyan); color: var(--success-cyan); }
-        .fatigue-warning { background: rgba(255, 0, 64, 0.2); border: 1px solid var(--alert-red); padding: 10px; border-radius: 6px; margin-bottom: 15px; text-align: center; font-size: 0.85rem; color: var(--alert-red); display: none; }
-        .fatigue-warning.active { display: block; animation: warningPulse 2s infinite; }
-        @keyframes warningPulse { 0%, 100% { box-shadow: 0 0 5px rgba(255, 0, 64, 0.5); } 50% { box-shadow: 0 0 20px rgba(255, 0, 64, 0.8); } }
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); z-index: 1500; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-        .modal-overlay.active { opacity: 1; pointer-events: all; }
-        .system-alert { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: rgba(5, 10, 20, 0.98); border: 2px solid var(--system-blue); border-radius: 12px; padding: 35px; text-align: center; z-index: 2000; opacity: 0; transition: all 0.3s; box-shadow: 0 0 60px var(--system-glow); min-width: 420px; max-width: 90vw; }
-        .system-alert.active { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-        .alert-header { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; color: var(--system-blue); margin-bottom: 20px; text-shadow: 0 0 20px var(--system-glow); letter-spacing: 3px; }
-        .alert-message { font-size: 1.1rem; margin-bottom: 25px; line-height: 1.6; }
-        .alert-rewards { display: flex; justify-content: center; gap: 25px; margin-bottom: 25px; padding: 20px; background: rgba(0, 212, 255, 0.1); border-radius: 8px; }
-        .reward-item { text-align: center; }
-        .reward-icon { font-size: 2rem; margin-bottom: 5px; }
-        .reward-value { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--success-cyan); }
-        .gold-input { width: 100%; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--system-border); color: var(--system-blue); font-family: 'Orbitron', sans-serif; font-size: 2rem; text-align: center; padding: 15px; margin: 20px 0; border-radius: 5px; }
-        @media (max-width: 1200px) { .main-container { grid-template-columns: 250px 1fr 320px; } }
-        @media (max-width: 968px) { .main-container { grid-template-columns: 1fr; gap: 20px; } .phase-indicator { position: relative; top: 0; right: 0; margin: 10px; text-align: center; } .level-number { font-size: 3.5rem; } .stats-container { grid-template-columns: 1fr; } }
-        @media (max-width: 600px) { .system-resources { flex-wrap: wrap; justify-content: center; } .main-container { padding: 15px; } .system-alert { min-width: 90%; padding: 25px; } .alert-rewards { flex-wrap: wrap; gap: 15px; } }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(0, 10, 20, 0.5); }
-        ::-webkit-scrollbar-thumb { background: var(--system-blue); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--success-cyan); }
-        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.98; } }
-        .system-panel { animation: flicker 5s infinite; }
+
+        /* Enhanced frame & scan effects */
+        .system-frame {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1000;
+            border: 2px solid var(--system-blue);
+            box-shadow: 0 0 40px var(--system-glow);
+            opacity: 0.6;
+        }
+
+        .scan-lines {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent 0px,
+                transparent 3px,
+                rgba(0, 240, 255, 0.06) 3px,
+                rgba(0, 240, 255, 0.06) 6px
+            );
+            pointer-events: none;
+            z-index: 999;
+            animation: scanMove 8s linear infinite;
+        }
+
+        @keyframes scanMove { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+
+        .system-header {
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.12), transparent);
+            border-bottom: 2px solid var(--system-border);
+            padding: 16px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hunter-avatar {
+            width: 64px;
+            height: 64px;
+            border: 3px solid var(--system-blue);
+            border-radius: 50%;
+            background: rgba(0, 240, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 0 25px var(--system-glow);
+            position: relative;
+        }
+
+        .hunter-avatar::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border: 2px solid var(--system-blue);
+            border-radius: 50%;
+            animation: pulseRing 2.5s infinite ease-in-out;
+        }
+
+        @keyframes pulseRing {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.15); opacity: 0; }
+        }
+
+        .hunter-details h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--system-blue);
+            text-shadow: 0 0 15px var(--system-glow);
+        }
+
+        .resource-box {
+            background: rgba(10, 25, 50, 0.7);
+            border: 1px solid var(--system-border);
+            padding: 10px 18px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .resource-box:hover {
+            border-color: var(--system-blue);
+            box-shadow: 0 0 20px var(--system-glow);
+            transform: translateY(-2px);
+        }
+
+        .main-container {
+            max-width: 1480px;
+            margin: 0 auto;
+            padding: 25px;
+            display: grid;
+            grid-template-columns: 300px 1fr 400px;
+            gap: 25px;
+        }
+
+        .system-panel {
+            background: var(--system-panel);
+            border: 1px solid var(--system-border);
+            border-radius: 10px;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .panel-header {
+            background: linear-gradient(90deg, rgba(0, 240, 255, 0.15), rgba(157, 78, 221, 0.1));
+            padding: 14px 24px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--system-border);
+        }
+
+        .level-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5.2rem;
+            font-weight: 900;
+            line-height: 1;
+            color: var(--system-blue);
+            text-shadow: 
+                0 0 20px var(--system-glow),
+                0 0 40px rgba(157, 78, 221, 0.4);
+        }
+
+        .xp-bar-wrapper {
+            height: 10px;
+            background: #0a1428;
+            border: 1px solid var(--system-border);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .xp-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00aaff, #00f0ff, #9d4edd);
+            box-shadow: 0 0 15px var(--system-glow);
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .bar-fill {
+            transition: width 0.5s ease;
+        }
+
+        .quest-card {
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .quest-card:hover:not(.completed):not(.blocked) {
+            transform: translateX(8px);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+        }
+
+        .btn-system {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-system::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 40%;
+            height: 300%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255,255,255,0.4),
+                transparent
+            );
+            transform: skewX(-25deg);
+            animation: btnShine 4s infinite;
+        }
+
+        @keyframes btnShine {
+            0% { transform: translateX(-150%) skewX(-25deg); }
+            100% { transform: translateX(400%) skewX(-25deg); }
+        }
+
+        .stat-row {
+            transition: all 0.2s;
+        }
+
+        .stat-row:hover {
+            background: rgba(0, 240, 255, 0.08) !important;
+        }
+
+        /* Body visual improvements */
+        .body-part {
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .body-part:hover {
+            filter: drop-shadow(0 0 20px currentColor) brightness(1.4);
+            transform: scale(1.08);
+        }
     </style>
-<base target="_blank">
 </head>
 <body>
-    <div class="system-frame">
-        <div class="frame-corner tl"></div>
-        <div class="frame-corner tr"></div>
-        <div class="frame-corner bl"></div>
-        <div class="frame-corner br"></div>
-    </div>
+    <div class="system-frame"></div>
     <div class="scan-lines"></div>
 
-    <div class="phase-indicator" id="phaseIndicator">PHASE 1: FOUNDATION</div>
-
     <header class="system-header">
-        <div class="hunter-info">
-            <div class="hunter-avatar">👤</div>
-            <div class="hunter-details">
-                <h1 id="hunterName">HUNTER</h1>
-                <div class="hunter-title" id="hunterTitle">The One Who Overcame Adversity</div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div class="hunter-avatar">🪓</div>
+            <div>
+                <h1 id="hunterName">SHADOW MONARCH</h1>
+                <div id="hunterTitle" style="color: #9d4edd; font-size: 0.9rem; letter-spacing: 2px;">THE ONE WHO RISES</div>
             </div>
         </div>
-        <div class="system-resources">
-            <div class="resource-box" onclick="openGoldModal()" style="cursor: pointer;">
-                <span class="resource-icon">🪙</span>
-                <div><div class="resource-value" id="goldDisplay">0</div><div class="resource-label">GOLD</div></div>
+
+        <div style="display: flex; gap: 16px;">
+            <div class="resource-box" onclick="openGoldModal()">
+                <span style="font-size: 1.4rem;">🪙</span>
+                <div>
+                    <div id="goldDisplay" style="font-family: Orbitron; font-size: 1.3rem; color: #ffd700;">0</div>
+                    <div style="font-size: 0.7rem; opacity: 0.7;">GOLD</div>
+                </div>
             </div>
             <div class="resource-box">
-                <span class="resource-icon">🔥</span>
-                <div><div class="resource-value" id="streakDisplay">0</div><div class="resource-label">STREAK</div></div>
+                <span style="font-size: 1.4rem;">🔥</span>
+                <div>
+                    <div id="streakDisplay" style="font-family: Orbitron; font-size: 1.3rem;">0</div>
+                    <div style="font-size: 0.7rem; opacity: 0.7;">STREAK</div>
+                </div>
             </div>
             <div class="resource-box">
-                <span class="resource-icon">⚡</span>
-                <div><div class="resource-value" id="disciplineDisplay">100</div><div class="resource-label">DISCIPLINE</div></div>
+                <span style="font-size: 1.4rem;">⚡</span>
+                <div>
+                    <div id="disciplineDisplay" style="font-family: Orbitron; font-size: 1.3rem; color: #00ffcc;">100</div>
+                    <div style="font-size: 0.7rem; opacity: 0.7;">DISCIPLINE</div>
+                </div>
             </div>
         </div>
     </header>
 
     <div class="main-container">
+        <!-- Body Status -->
         <div class="system-panel">
-            <div class="panel-header">BODY STATUS</div>
-            <div class="panel-content">
-                <div class="body-visual">
-                    <div class="body-scan-line"></div>
-                    <svg width="180" height="360" viewBox="0 0 200 400">
-                        <circle class="body-part status-normal" data-part="head" cx="100" cy="30" r="22" />
-                        <rect class="body-part status-normal" data-part="neck" x="88" y="52" width="24" height="16" rx="5" />
-                        <ellipse class="body-part status-normal" data-part="shoulders" cx="65" cy="80" rx="28" ry="14" />
-                        <ellipse class="body-part status-normal" data-part="shoulders" cx="135" cy="80" rx="28" ry="14" />
-                        <rect class="body-part status-normal" data-part="chest" x="70" y="92" width="60" height="45" rx="12" />
-                        <rect class="body-part status-normal" data-part="abs" x="75" y="142" width="50" height="55" rx="8" />
-                        <rect class="body-part status-normal" data-part="arms" x="38" y="92" width="22" height="45" rx="8" transform="rotate(-12 49 115)" />
-                        <rect class="body-part status-normal" data-part="arms" x="140" y="92" width="22" height="45" rx="8" transform="rotate(12 151 115)" />
-                        <rect class="body-part status-normal" data-part="arms" x="28" y="138" width="20" height="40" rx="6" transform="rotate(-8 38 158)" />
-                        <rect class="body-part status-normal" data-part="arms" x="152" y="138" width="20" height="40" rx="6" transform="rotate(8 162 158)" />
-                        <rect class="body-part status-normal" data-part="back" x="65" y="92" width="70" height="55" rx="10" opacity="0.4" />
-                        <rect class="body-part status-normal" data-part="legs" x="70" y="200" width="26" height="70" rx="12" />
-                        <rect class="body-part status-normal" data-part="legs" x="104" y="200" width="26" height="70" rx="12" />
-                        <rect class="body-part status-normal" data-part="legs" x="72" y="275" width="22" height="60" rx="8" />
-                        <rect class="body-part status-normal" data-part="legs" x="106" y="275" width="22" height="60" rx="8" />
-                        <line x1="100" y1="52" x2="100" y2="92" stroke="var(--system-blue)" stroke-width="2" opacity="0.5" />
-                        <line x1="65" y1="80" x2="75" y2="92" stroke="var(--system-blue)" stroke-width="1.5" opacity="0.5" />
-                        <line x1="135" y1="80" x2="125" y2="92" stroke="var(--system-blue)" stroke-width="1.5" opacity="0.5" />
+            <div class="panel-header">◇ BODY STATUS</div>
+            <div class="panel-content" style="padding: 25px; text-align: center;">
+                <div style="position: relative; height: 420px; margin: 0 auto;">
+                    <svg width="200" height="420" viewBox="0 0 200 420" style="filter: drop-shadow(0 0 15px #00f0ff);">
+                        <!-- Improved body SVG with better proportions -->
+                        <circle class="body-part status-normal" data-part="head" cx="100" cy="45" r="28"/>
+                        <rect class="body-part status-normal" data-part="neck" x="85" y="72" width="30" height="22" rx="8"/>
+                        <ellipse class="body-part status-normal" data-part="shoulders" cx="68" cy="105" rx="32" ry="18"/>
+                        <ellipse class="body-part status-normal" data-part="shoulders" cx="132" cy="105" rx="32" ry="18"/>
+                        <rect class="body-part status-normal" data-part="chest" x="65" y="115" width="70" height="55" rx="15"/>
+                        <rect class="body-part status-normal" data-part="abs" x="72" y="170" width="56" height="65" rx="10"/>
+                        <!-- Arms -->
+                        <rect class="body-part status-normal" data-part="arms" x="32" y="118" width="25" height="68" rx="10" transform="rotate(-25 45 145)"/>
+                        <rect class="body-part status-normal" data-part="arms" x="143" y="118" width="25" height="68" rx="10" transform="rotate(25 155 145)"/>
+                        <!-- Legs -->
+                        <rect class="body-part status-normal" data-part="legs" x="68" y="235" width="28" height="95" rx="12"/>
+                        <rect class="body-part status-normal" data-part="legs" x="104" y="235" width="28" height="95" rx="12"/>
                     </svg>
                 </div>
             </div>
         </div>
 
+        <!-- Main Status Window -->
         <div class="system-panel">
             <div class="panel-header">STATUS WINDOW</div>
-            <div class="panel-content">
-                <div class="status-window">
-                    <div class="level-display">
-                        <div class="level-number" id="levelDisplay">1</div>
-                    </div>
-                    <div class="xp-bar-container">
-                        <div class="xp-bar-wrapper"><div class="xp-bar-fill" id="xpBar" style="width: 0%"></div></div>
-                        <div class="xp-text" id="xpText">0 / 100 XP</div>
-                    </div>
-                    <div class="rank-title" id="rankDisplay">E-RANK</div>
-                    <div class="job-title" id="jobDisplay">Novice Hunter</div>
+            <div class="panel-content" style="padding: 25px;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div class="level-number" id="levelDisplay">1</div>
+                    <div id="rankDisplay" style="font-size: 1.4rem; color: #00ffcc; letter-spacing: 4px; margin-top: -10px;">E-RANK</div>
+                </div>
 
-                    <div class="resource-bars">
-                        <div class="bar-container">
-                            <div class="bar-icon">❤️</div>
-                            <div class="bar-wrapper"><div class="bar-fill hp-fill" id="hpBar" style="width: 100%"></div><div class="bar-text" id="hpText">100/100</div></div>
-                        </div>
-                        <div class="bar-container">
-                            <div class="bar-icon">💧</div>
-                            <div class="bar-wrapper"><div class="bar-fill mp-fill" id="mpBar" style="width: 100%"></div><div class="bar-text" id="mpText">100/100</div></div>
-                        </div>
-                        <div class="bar-container">
-                            <div class="bar-icon">⚡</div>
-                            <div class="bar-wrapper"><div class="bar-fill fatigue-fill" id="fatigueBar" style="width: 0%"></div><div class="bar-text" id="fatigueText">0/100</div></div>
-                        </div>
-                    </div>
+                <div class="xp-bar-wrapper"><div class="xp-bar-fill" id="xpBar" style="width: 0%"></div></div>
+                <div style="text-align: center; margin: 8px 0; font-size: 0.85rem; opacity: 0.8;" id="xpText">0 / 100 XP</div>
 
-                    <div class="stats-container">
-                        <div class="stat-row"><div class="stat-left"><span class="stat-icon">💪</span><span class="stat-name">STR</span></div><div class="stat-value-box"><span class="stat-value" id="strValue">10</span><span class="stat-bonus" id="strBonus"></span></div></div>
-                        <div class="stat-row"><div class="stat-left"><span class="stat-icon">❤️</span><span class="stat-name">VIT</span></div><div class="stat-value-box"><span class="stat-value" id="vitValue">10</span><span class="stat-bonus" id="vitBonus"></span></div></div>
-                        <div class="stat-row"><div class="stat-left"><span class="stat-icon">🏃</span><span class="stat-name">AGI</span></div><div class="stat-value-box"><span class="stat-value" id="agiValue">10</span><span class="stat-bonus" id="agiBonus"></span></div></div>
-                        <div class="stat-row"><div class="stat-left"><span class="stat-icon">🧠</span><span class="stat-name">INT</span></div><div class="stat-value-box"><span class="stat-value" id="intValue">10</span><span class="stat-bonus" id="intBonus"></span></div></div>
-                        <div class="stat-row"><div class="stat-left"><span class="stat-icon">👁️</span><span class="stat-name">PER</span></div><div class="stat-value-box"><span class="stat-value" id="perValue">10</span><span class="stat-bonus" id="perBonus"></span></div></div>
-                        <div class="stat-row"><div class="stat-left"><span class="stat-icon">🎯</span><span class="stat-name">AP</span></div><div class="stat-value-box"><span class="stat-value" id="apValue">0</span><span class="stat-bonus">Available</span></div></div>
+                <div style="display: flex; justify-content: space-between; margin: 20px 0 10px;">
+                    <div style="color: #00ffcc;" id="jobDisplay">Novice Hunter</div>
+                    <div onclick="allocateStatPoints()" style="cursor: pointer; background: rgba(157,78,221,0.2); padding: 4px 12px; border-radius: 4px; font-size: 0.8rem; border: 1px solid #9d4edd;" id="apContainer">
+                        AP: <span id="apValue">0</span>
                     </div>
+                </div>
+
+                <!-- Resource Bars -->
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 1.5rem; width: 30px;">❤️</span>
+                        <div style="flex: 1; position: relative;">
+                            <div class="xp-bar-wrapper"><div class="bar-fill hp-fill" id="hpBar" style="width: 100%; background: linear-gradient(90deg, #ff0040, #ff4080);"></div></div>
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.8rem; font-weight: 600;" id="hpText">100/100</div>
+                        </div>
+                    </div>
+                    <!-- Similar for MP and Fatigue -->
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 1.5rem; width: 30px;">💧</span>
+                        <div style="flex: 1; position: relative;">
+                            <div class="xp-bar-wrapper"><div class="bar-fill mp-fill" id="mpBar" style="width: 100%; background: linear-gradient(90deg, #0066ff, #00f0ff);"></div></div>
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.8rem; font-weight: 600;" id="mpText">100/100</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 1.5rem; width: 30px;">⚡</span>
+                        <div style="flex: 1; position: relative;">
+                            <div class="xp-bar-wrapper"><div class="bar-fill fatigue-fill" id="fatigueBar" style="width: 0%; background: linear-gradient(90deg, #ff8800, #ffaa00);"></div></div>
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.8rem; font-weight: 600;" id="fatigueText">0/100</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;" id="statsContainer">
+                    <!-- Populated by JS -->
                 </div>
             </div>
         </div>
 
+        <!-- Daily Protocol -->
         <div class="system-panel">
-            <div class="panel-header">DAILY PROTOCOL</div>
-            <div class="panel-content">
-                <div class="fatigue-warning" id="fatigueWarning">⚠️ FATIGUE CRITICAL - RECOVERY REQUIRED</div>
-                <div class="protocol-header">
-                    <span class="protocol-title">TODAY'S OBJECTIVES</span>
-                    <span class="protocol-progress" id="protocolProgress">0/4</span>
+            <div class="panel-header">DAILY PROTOCOL <span id="phaseIndicator" style="margin-left: auto; font-size: 0.75rem; padding: 2px 10px; border-radius: 20px;"></span></div>
+            <div class="panel-content" style="padding: 20px;">
+                <div id="fatigueWarning" style="display: none; background: rgba(255,0,64,0.15); border: 1px solid #ff0040; color: #ff4080; padding: 12px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
+                    ⚠️ FATIGUE CRITICAL — PRIORITIZE RECOVERY
                 </div>
+
                 <div id="protocolContainer"></div>
-                <button class="btn-system" onclick="generateDailyProtocol()" style="width: 100%; margin-top: 15px;">🔄 GENERATE NEW PROTOCOL</button>
+
+                <button onclick="generateDailyProtocol()" class="btn-system" style="width: 100%; margin-top: 20px; padding: 14px; font-size: 0.95rem; background: rgba(157,78,221,0.2); border: 1px solid #9d4edd; color: #c4a1ff;">
+                    🔄 GENERATE NEW PROTOCOL
+                </button>
             </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="modalOverlay"></div>
-    <div class="system-alert" id="systemAlert">
-        <div class="alert-header" id="alertHeader">⚡ SYSTEM MESSAGE</div>
-        <div class="alert-message" id="alertMessage"></div>
-        <div class="alert-rewards" id="alertRewards"></div>
-        <button class="btn-system" onclick="closeAlert()" style="width: 100%;">CONFIRM</button>
-    </div>
-
-    <div class="system-alert" id="goldModal">
-        <div class="alert-header">🪙 UPDATE GOLD</div>
-        <input type="number" class="gold-input" id="goldInput" value="0">
-        <div style="display: flex; gap: 10px;">
-            <button class="btn-system" onclick="closeGoldModal()" style="flex: 1;">CANCEL</button>
-            <button class="btn-system" onclick="updateGold()" style="flex: 1;">UPDATE</button>
+    <!-- Modals -->
+    <div id="modalOverlay" style="position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1500; display: none; align-items: center; justify-content: center;">
+        <div id="systemAlert" style="background: #0a1428; border: 2px solid #00f0ff; border-radius: 12px; padding: 35px; max-width: 460px; width: 90%; text-align: center; box-shadow: 0 0 60px rgba(0,240,255,0.5);">
+            <!-- Dynamic content -->
         </div>
     </div>
 
     <script>
-        const SYSTEM_CONFIG = {
-            MAX_LEVEL: 1000,
-            PHASES: [
-                { name: "FOUNDATION", min: 1, max: 100, color: "#00ff88" },
-                { name: "ADAPTATION", min: 101, max: 250, color: "#00d4ff" },
-                { name: "SPECIALIZATION", min: 251, max: 450, color: "#9d4edd" },
-                { name: "INTENSIFICATION", min: 451, max: 700, color: "#ff6b35" },
-                { name: "MASTERY", min: 701, max: 900, color: "#ffd700" },
-                { name: "ASCENSION", min: 901, max: 1000, color: "#ff0040" }
-            ],
-            RANKS: [
-                { name: "E", level: 1, title: "Novice Hunter" },
-                { name: "D", level: 15, title: "Beginner Hunter" },
-                { name: "C", level: 30, title: "Intermediate Hunter" },
-                { name: "B", level: 50, title: "Advanced Hunter" },
-                { name: "A", level: 75, title: "Elite Hunter" },
-                { name: "S", level: 100, title: "Shadow Monarch" }
-            ]
-        };
-
+        // === CORE DATA ===
         let hunter = {
-            name: "Hunter", title: "The One Who Overcame Adversity", level: 1, xp: 0, rank: "E", job: "Novice Hunter", phase: 1,
-            hp: 100, maxHp: 100, mp: 100, maxMp: 100, fatigue: 0, gold: 0,
-            stats: { str: 10, vit: 10, agi: 10, int: 10, per: 10 }, ap: 0,
-            streak: 0, discipline: 100, lastActive: null,
+            name: "Shadow Monarch",
+            level: 1,
+            xp: 0,
+            rank: "E",
+            job: "Novice Hunter",
+            gold: 0,
+            streak: 0,
+            discipline: 100,
+            hp: 100, maxHp: 100,
+            mp: 100, maxMp: 100,
+            fatigue: 0,
+            stats: { str: 12, vit: 12, agi: 10, int: 10, per: 8 },
+            ap: 0,
             bodyStatus: {
-                head: { status: 'normal', fatigue: 0 }, neck: { status: 'normal', fatigue: 0 },
-                shoulders: { status: 'normal', fatigue: 0 }, chest: { status: 'normal', fatigue: 0 },
-                abs: { status: 'normal', fatigue: 0 }, arms: { status: 'normal', fatigue: 0 },
-                back: { status: 'normal', fatigue: 0 }, legs: { status: 'normal', fatigue: 0 }
+                head: {status: 'normal', fatigue: 0},
+                neck: {status: 'normal', fatigue: 0},
+                shoulders: {status: 'normal', fatigue: 0},
+                chest: {status: 'normal', fatigue: 0},
+                abs: {status: 'normal', fatigue: 0},
+                arms: {status: 'normal', fatigue: 0},
+                legs: {status: 'normal', fatigue: 0}
             },
-            dailyProtocol: null, protocolHistory: []
+            dailyProtocol: null,
+            lastReset: null
         };
 
+        const PHASES = [
+            {name: "FOUNDATION", min: 1, max: 100, color: "#00ff88"},
+            {name: "ADAPTATION", min: 101, max: 250, color: "#00f0ff"},
+            {name: "SPECIALIZATION", min: 251, max: 450, color: "#9d4edd"},
+            {name: "INTENSIFICATION", min: 451, max: 700, color: "#ff6b35"},
+            {name: "MASTERY", min: 701, max: 900, color: "#ffd700"},
+            {name: "ASCENSION", min: 901, max: 1000, color: "#ff0040"}
+        ];
+
+        const RANKS = [
+            {name: "E", level: 1, title: "Novice Hunter"},
+            {name: "D", level: 20, title: "Awakened Hunter"},
+            {name: "C", level: 40, title: "Seasoned Hunter"},
+            {name: "B", level: 65, title: "Elite Hunter"},
+            {name: "A", level: 90, title: "National Level"},
+            {name: "S", level: 120, title: "Shadow Monarch"}
+        ];
+
+        // Quest templates (expanded)
         const QUEST_DB = {
-            strength: [
-                { name: "Push-up Protocol", baseReps: 20, unit: "reps", fatigue: 25, muscles: ["chest", "arms", "shoulders"] },
-                { name: "Squat Sequence", baseReps: 30, unit: "reps", fatigue: 25, muscles: ["legs"] },
-                { name: "Pull-up Power", baseReps: 10, unit: "reps", fatigue: 30, muscles: ["back", "arms"] },
-                { name: "Core Crusher", baseReps: 60, unit: "seconds", fatigue: 20, muscles: ["abs"] }
-            ],
-            agility: [
-                { name: "Sprint Intervals", baseReps: 10, unit: "x100m", fatigue: 20, muscles: ["legs"] },
-                { name: "Shadowboxing", baseReps: 3, unit: "rounds", fatigue: 20, muscles: ["arms", "shoulders"] },
-                { name: "5K Run", baseReps: 5, unit: "km", fatigue: 25, muscles: ["legs"] },
-                { name: "Reaction Drill", baseReps: 10, unit: "minutes", fatigue: 15, muscles: ["head"] }
-            ],
-            intelligence: [
-                { name: "Deep Reading", baseReps: 20, unit: "pages", fatigue: 5, muscles: ["head"] },
-                { name: "Creative Writing", baseReps: 300, unit: "words", fatigue: 5, muscles: ["head"] },
-                { name: "Skill Study", baseReps: 30, unit: "minutes", fatigue: 5, muscles: ["head"] },
-                { name: "Journaling", baseReps: 500, unit: "words", fatigue: 5, muscles: ["head"] }
-            ],
-            recovery: [
-                { name: "Yoga Flow", baseReps: 20, unit: "minutes", fatigue: -30, muscles: ["abs", "legs", "back"] },
-                { name: "Stretching Protocol", baseReps: 15, unit: "minutes", fatigue: -25, muscles: ["all"] },
-                { name: "Meditation", baseReps: 15, unit: "minutes", fatigue: -20, muscles: ["head"] },
-                { name: "Cold Shower", baseReps: 3, unit: "minutes", fatigue: -15, muscles: ["all"] }
-            ]
+            strength: ["Push-up Protocol", "Deadlift Dominion", "Bench Press Assault", "Core Crusher"],
+            agility: ["Sprint Intervals", "Shadow Dodge Drill", "Parkour Flow", "Reaction Training"],
+            intelligence: ["Deep Study", "Tactical Analysis", "Skill Journaling", "Strategic Planning"],
+            recovery: ["Active Recovery", "Meditation Ritual", "Cold Exposure", "Full Rest Protocol"]
         };
 
-        function init() {
-            loadData();
-            checkDailyReset();
-            updateUI();
-            setupInteractions();
-            if (!hunter.dailyProtocol || isNewDay()) generateDailyProtocol();
+        function saveData() {
+            localStorage.setItem('soloLeveling_v4', JSON.stringify(hunter));
         }
 
         function loadData() {
-            const saved = localStorage.getItem('soloLeveling_v3');
-            if (saved) hunter = { ...hunter, ...JSON.parse(saved) };
+            const saved = localStorage.getItem('soloLeveling_v4');
+            if (saved) hunter = {...hunter, ...JSON.parse(saved)};
         }
 
-        function saveData() {
-            localStorage.setItem('soloLeveling_v3', JSON.stringify(hunter));
-        }
-
-        function xpRequired(level) {
-            return Math.floor(100 * Math.pow(level, 1.5));
+        function getXPRequired(level) {
+            return Math.floor(120 * Math.pow(level, 1.6));
         }
 
         function getCurrentPhase() {
-            return SYSTEM_CONFIG.PHASES.find(p => hunter.level >= p.min && hunter.level <= p.max) || SYSTEM_CONFIG.PHASES[0];
+            return PHASES.find(p => hunter.level >= p.min && hunter.level <= p.max) || PHASES[0];
         }
 
         function getCurrentRank() {
-            for (let i = SYSTEM_CONFIG.RANKS.length - 1; i >= 0; i--) {
-                if (hunter.level >= SYSTEM_CONFIG.RANKS[i].level) return SYSTEM_CONFIG.RANKS[i];
-            }
-            return SYSTEM_CONFIG.RANKS[0];
-        }
-
-        function addXP(amount) {
-            if (hunter.discipline < 50) amount *= 0.8;
-            if (hunter.discipline > 90) amount *= 1.2;
-            hunter.xp += Math.floor(amount);
-            while (hunter.xp >= xpRequired(hunter.level) && hunter.level < SYSTEM_CONFIG.MAX_LEVEL) {
-                hunter.xp -= xpRequired(hunter.level);
-                levelUp();
-            }
-            saveData();
-            updateUI();
+            return RANKS.findLast(r => hunter.level >= r.level) || RANKS[0];
         }
 
         function levelUp() {
             hunter.level++;
-            hunter.ap += 5;
-            hunter.maxHp += 5;
-            hunter.maxMp += 3;
+            hunter.ap += 6;
+            hunter.maxHp += 8;
+            hunter.maxMp += 5;
             hunter.hp = hunter.maxHp;
             hunter.mp = hunter.maxMp;
-            const rank = getCurrentRank();
-            if (rank.name !== hunter.rank) {
-                hunter.rank = rank.name;
-                hunter.job = rank.title;
-                showAlert(`RANK UP!`, [{ icon: '👑', value: rank.name + '-RANK', label: 'RANK' }]);
+
+            const newRank = getCurrentRank();
+            if (newRank.name !== hunter.rank) {
+                hunter.rank = newRank.name;
+                hunter.job = newRank.title;
+                showAlert(`<span style="color:#ffd700">RANK UP!</span><br>${newRank.title}`, [
+                    {icon: '👑', value: newRank.name + '-RANK', label: 'NEW RANK'}
+                ]);
             }
-            if (hunter.level % 10 === 0) hunter.gold += 50;
         }
 
-        function applyFatigue(type, baseAmount) {
-            const scaled = baseAmount * (1 + hunter.level * 0.01);
-            const rankMultipliers = { E: 1, D: 1.1, C: 1.2, B: 1.3, A: 1.4, S: 1.5 };
-            const multiplier = rankMultipliers[hunter.rank] || 1;
-            const finalAmount = Math.floor(scaled * multiplier);
-            if (type === 'recovery') hunter.fatigue = Math.max(0, hunter.fatigue + finalAmount);
-            else hunter.fatigue = Math.min(100, hunter.fatigue + finalAmount);
-            updateBodyStatus();
-            return finalAmount;
+        function addXP(amount) {
+            hunter.xp += Math.floor(amount * (hunter.discipline > 85 ? 1.15 : 1));
+            while (hunter.xp >= getXPRequired(hunter.level)) {
+                hunter.xp -= getXPRequired(hunter.level);
+                levelUp();
+            }
+            updateUI();
         }
 
-        function updateBodyStatus() {
-            Object.keys(hunter.bodyStatus).forEach(part => {
-                const status = hunter.bodyStatus[part];
-                if (status.fatigue >= 80) status.status = 'injured';
-                else if (status.fatigue >= 50) status.status = 'fatigue';
-                else if (status.fatigue >= 30) status.status = 'active';
-                else status.status = 'normal';
-            });
-        }
+        function allocateStatPoints() {
+            if (hunter.ap <= 0) return showAlert("NO AVAILABLE STAT POINTS", []);
+            
+            const stat = prompt("Which stat to increase?\n(str, vit, agi, int, per)", "str");
+            const validStats = ['str','vit','agi','int','per'];
+            if (!validStats.includes(stat)) return;
 
-        function canPerformQuest(type) {
-            return !(hunter.fatigue >= 80 && type !== 'recovery');
+            const points = parseInt(prompt("How many points? (max " + hunter.ap + ")", "1")) || 1;
+            if (points > hunter.ap || points < 1) return;
+
+            hunter.stats[stat] += points;
+            hunter.ap -= points;
+            showAlert(`STAT ALLOCATED<br>+${points} ${stat.toUpperCase()}`, []);
+            saveData();
+            updateUI();
         }
 
         function generateDailyProtocol() {
-            const scaleValue = (base) => Math.floor(base * (1 + hunter.level * 0.05));
-            const protocol = { date: new Date().toDateString(), quests: [], completed: 0 };
+            const protocol = {
+                date: new Date().toDateString(),
+                quests: []
+            };
 
-            ['strength', 'agility', 'intelligence', 'recovery'].forEach(category => {
-                const templates = QUEST_DB[category];
-                const template = templates[Math.floor(Math.random() * templates.length)];
+            Object.keys(QUEST_DB).forEach(cat => {
+                const quests = QUEST_DB[cat];
+                const name = quests[Math.floor(Math.random()*quests.length)];
+                const base = 15 + hunter.level * 2;
+                
                 protocol.quests.push({
-                    id: Date.now() + Math.random(), category: category, name: template.name,
-                    desc: `${scaleValue(template.baseReps)} ${template.unit}`,
-                    target: scaleValue(template.baseReps), unit: template.unit,
-                    fatigue: template.fatigue, muscles: template.muscles, completed: false,
-                    rewards: calculateRewards(category, hunter.level)
+                    id: Date.now() + Math.random(),
+                    category: cat,
+                    name: name,
+                    target: Math.floor(base * (cat === 'recovery' ? 0.6 : 1)),
+                    fatigue: cat === 'recovery' ? -25 : 22 + Math.floor(hunter.level * 0.8),
+                    rewards: {
+                        xp: 60 + Math.floor(hunter.level * 9),
+                        gold: 8 + Math.floor(hunter.level / 3),
+                        stat: cat === 'strength' ? 'str' : cat === 'agility' ? 'agi' : cat === 'intelligence' ? 'int' : 'vit'
+                    },
+                    completed: false
                 });
             });
 
             hunter.dailyProtocol = protocol;
             saveData();
-            updateProtocolUI();
+            updateUI();
         }
 
-        function calculateRewards(category, level) {
-            const baseXP = 50;
-            const scaledXP = Math.floor(baseXP * (1 + level * 0.08));
-            const rewards = { xp: scaledXP, gold: Math.floor(scaledXP / 5) };
-            const gain = Math.max(1, Math.floor(2 / (1 + level * 0.01)));
-            if (category === 'strength') rewards.str = gain;
-            if (category === 'agility') rewards.agi = gain;
-            if (category === 'intelligence') rewards.int = gain;
-            if (category === 'recovery') rewards.vit = 1;
-            return rewards;
-        }
-
-        function completeQuest(questId) {
-            const quest = hunter.dailyProtocol.quests.find(q => q.id === questId);
+        function completeQuest(id) {
+            if (!hunter.dailyProtocol) return;
+            const quest = hunter.dailyProtocol.quests.find(q => q.id === id);
             if (!quest || quest.completed) return;
-            if (!canPerformQuest(quest.category)) {
-                showAlert("FATIGUE TOO HIGH<br>Complete recovery quest first!", []);
-                return;
+
+            if (hunter.fatigue > 75 && quest.category !== 'recovery') {
+                return showAlert("FATIGUE TOO HIGH<br>Complete a recovery quest first.", []);
             }
 
-            applyFatigue(quest.category === 'recovery' ? 'recovery' : 'active', quest.fatigue);
-            quest.muscles.forEach(muscle => {
-                if (hunter.bodyStatus[muscle]) {
-                    hunter.bodyStatus[muscle].fatigue = Math.min(100, hunter.bodyStatus[muscle].fatigue + Math.abs(quest.fatigue) * 0.5);
-                }
-            });
+            // Apply fatigue
+            hunter.fatigue = Math.min(100, Math.max(0, hunter.fatigue + quest.fatigue));
 
+            // Rewards
             addXP(quest.rewards.xp);
             hunter.gold += quest.rewards.gold;
-            if (quest.rewards.str) hunter.stats.str += quest.rewards.str;
-            if (quest.rewards.agi) hunter.stats.agi += quest.rewards.agi;
-            if (quest.rewards.int) hunter.stats.int += quest.rewards.int;
-            if (quest.rewards.vit) hunter.stats.vit += quest.rewards.vit;
+            if (quest.rewards.stat) hunter.stats[quest.rewards.stat] += 1;
 
             quest.completed = true;
-            hunter.dailyProtocol.completed++;
-            if (hunter.dailyProtocol.completed === hunter.dailyProtocol.quests.length) {
+
+            // Streak & Discipline
+            if (hunter.dailyProtocol.quests.every(q => q.completed)) {
                 hunter.streak++;
-                hunter.discipline = Math.min(100, hunter.discipline + 5);
+                hunter.discipline = Math.min(100, hunter.discipline + 8);
             }
 
-            const rewardItems = [
-                { icon: '⭐', value: '+' + quest.rewards.xp, label: 'XP' },
-                { icon: '🪙', value: '+' + quest.rewards.gold, label: 'GOLD' }
-            ];
-            if (quest.rewards.str) rewardItems.push({ icon: '💪', value: '+' + quest.rewards.str, label: 'STR' });
-            if (quest.rewards.agi) rewardItems.push({ icon: '🏃', value: '+' + quest.rewards.agi, label: 'AGI' });
-            if (quest.rewards.int) rewardItems.push({ icon: '🧠', value: '+' + quest.rewards.int, label: 'INT' });
-            if (quest.rewards.vit) rewardItems.push({ icon: '❤️', value: '+' + quest.rewards.vit, label: 'VIT' });
+            showAlert(`QUEST CLEARED<br><span style="color:#00ffcc">${quest.name}</span>`, [
+                {icon:'⭐', value: '+'+quest.rewards.xp, label:'XP'},
+                {icon:'🪙', value: '+'+quest.rewards.gold, label:'GOLD'}
+            ]);
 
-            showAlert(`QUEST COMPLETE<br>${quest.name}`, rewardItems);
             saveData();
             updateUI();
         }
 
-        function skipQuest(questId) {
-            hunter.discipline = Math.max(0, hunter.discipline - 10);
-            hunter.streak = 0;
-            const quest = hunter.dailyProtocol.quests.find(q => q.id === questId);
-            if (quest) quest.skipped = true;
-            saveData();
-            updateProtocolUI();
-            showAlert("QUEST SKIPPED<br>Discipline decreased", []);
-        }
-
         function updateUI() {
+            // Basic info
             document.getElementById('levelDisplay').textContent = hunter.level;
-            document.getElementById('rankDisplay').textContent = hunter.rank + '-RANK';
+            document.getElementById('rankDisplay').textContent = hunter.rank + "-RANK";
             document.getElementById('jobDisplay').textContent = hunter.job;
             document.getElementById('goldDisplay').textContent = hunter.gold;
             document.getElementById('streakDisplay').textContent = hunter.streak;
             document.getElementById('disciplineDisplay').textContent = hunter.discipline;
+            document.getElementById('apValue').textContent = hunter.ap;
 
-            const phase = getCurrentPhase();
-            document.getElementById('phaseIndicator').textContent = `PHASE ${SYSTEM_CONFIG.PHASES.indexOf(phase) + 1}: ${phase.name}`;
-            document.getElementById('phaseIndicator').style.color = phase.color;
-            document.getElementById('phaseIndicator').style.borderColor = phase.color;
+            // XP
+            const xpReq = getXPRequired(hunter.level);
+            document.getElementById('xpBar').style.width = (hunter.xp / xpReq * 100) + '%';
+            document.getElementById('xpText').textContent = `${hunter.xp} / ${xpReq} XP`;
 
-            const xpNeeded = xpRequired(hunter.level);
-            document.getElementById('xpBar').style.width = ((hunter.xp / xpNeeded) * 100) + '%';
-            document.getElementById('xpText').textContent = `${hunter.xp} / ${xpNeeded} XP`;
-
-            document.getElementById('hpBar').style.width = (hunter.hp / hunter.maxHp * 100) + '%';
+            // Bars
+            document.getElementById('hpBar').style.width = '100%';
             document.getElementById('hpText').textContent = `${hunter.hp}/${hunter.maxHp}`;
-            document.getElementById('mpBar').style.width = (hunter.mp / hunter.maxMp * 100) + '%';
+            document.getElementById('mpBar').style.width = '100%';
             document.getElementById('mpText').textContent = `${hunter.mp}/${hunter.maxMp}`;
             document.getElementById('fatigueBar').style.width = hunter.fatigue + '%';
             document.getElementById('fatigueText').textContent = `${hunter.fatigue}/100`;
 
-            document.getElementById('strValue').textContent = hunter.stats.str;
-            document.getElementById('vitValue').textContent = hunter.stats.vit;
-            document.getElementById('agiValue').textContent = hunter.stats.agi;
-            document.getElementById('intValue').textContent = hunter.stats.int;
-            document.getElementById('perValue').textContent = hunter.stats.per;
-            document.getElementById('apValue').textContent = hunter.ap;
+            // Phase
+            const phase = getCurrentPhase();
+            const phaseEl = document.getElementById('phaseIndicator');
+            phaseEl.textContent = phase.name;
+            phaseEl.style.color = phase.color;
+            phaseEl.style.border = `1px solid ${phase.color}`;
 
-            const warning = document.getElementById('fatigueWarning');
-            if (hunter.fatigue >= 80) warning.classList.add('active');
-            else warning.classList.remove('active');
+            // Stats
+            const statsHTML = Object.entries(hunter.stats).map(([key, val]) => `
+                <div class="stat-row" style="background:rgba(10,25,50,0.6); padding:12px 16px; border-radius:6px; border:1px solid rgba(0,240,255,0.2);">
+                    <div style="font-weight:600; letter-spacing:1px;">${key.toUpperCase()}</div>
+                    <div style="font-family:Orbitron; color:var(--system-blue); font-size:1.25rem;">${val}</div>
+                </div>
+            `).join('');
+            document.getElementById('statsContainer').innerHTML = statsHTML;
 
-            updateBodyVisuals();
-            updateProtocolUI();
-        }
-
-        function updateBodyVisuals() {
-            document.querySelectorAll('.body-part').forEach(part => {
-                const partName = part.dataset.part;
-                const status = hunter.bodyStatus[partName];
-                if (!status) return;
-                part.classList.remove('status-normal', 'status-active', 'status-fatigue', 'status-injured');
-                part.classList.add('status-' + status.status);
-            });
-        }
-
-        function updateProtocolUI() {
-            if (!hunter.dailyProtocol) return;
-            const container = document.getElementById('protocolContainer');
-            const completed = hunter.dailyProtocol.quests.filter(q => q.completed).length;
-            document.getElementById('protocolProgress').textContent = `${completed}/${hunter.dailyProtocol.quests.length}`;
-
-            const categoryIcons = { strength: '💪', agility: '🏃', intelligence: '🧠', recovery: '🧘' };
-
-            container.innerHTML = hunter.dailyProtocol.quests.map(quest => {
-                const isBlocked = !canPerformQuest(quest.category) && !quest.completed;
-                const isSkipped = quest.skipped;
-                return `
-                    <div class="quest-category">
-                        <div class="category-header">
-                            <span class="category-icon">${categoryIcons[quest.category]}</span>
-                            <span>${quest.category.toUpperCase()}</span>
-                        </div>
-                        <div class="quest-card ${quest.completed ? 'completed' : ''} ${isBlocked ? 'blocked' : ''} ${isSkipped ? 'blocked' : ''}">
-                            <div class="quest-header">
-                                <span class="quest-name">${quest.name}</span>
-                                <span class="quest-difficulty" style="color: ${isBlocked ? 'var(--alert-red)' : 'var(--system-blue)'}; border-color: ${isBlocked ? 'var(--alert-red)' : 'var(--system-blue)'}">${isSkipped ? 'SKIPPED' : isBlocked ? 'BLOCKED' : quest.completed ? 'DONE' : 'ACTIVE'}</span>
-                            </div>
-                            <div class="quest-desc">${quest.desc}</div>
-                            <div class="quest-impact">
-                                <span class="impact-item impact-positive">XP +${quest.rewards.xp}</span>
-                                <span class="impact-item impact-positive">🪙 +${quest.rewards.gold}</span>
-                                ${quest.fatigue > 0 ? `<span class="impact-item impact-negative">FATIGUE +${quest.fatigue}</span>` : `<span class="impact-item impact-positive">RECOVERY ${quest.fatigue}</span>`}
-                            </div>
-                            ${!quest.completed && !isSkipped ? `
-                                <div class="quest-actions">
-                                    <button class="btn-system complete" onclick="completeQuest(${quest.id})" ${isBlocked ? 'disabled' : ''}>${isBlocked ? 'RECOVERY REQUIRED' : 'COMPLETE'}</button>
-                                    <button class="btn-system" onclick="skipQuest(${quest.id})">SKIP</button>
+            // Protocol
+            if (hunter.dailyProtocol) {
+                let html = '';
+                hunter.dailyProtocol.quests.forEach(quest => {
+                    const completed = quest.completed;
+                    html += `
+                        <div class="quest-card" style="background:rgba(10,20,45,0.8); border:1px solid ${completed ? '#00ffcc' : '#00f0ff'}; margin-bottom:12px; padding:14px; border-radius:8px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <div style="font-weight:600;">${quest.name}</div>
+                                <div style="font-size:0.75rem; padding:2px 8px; border-radius:4px; background:${completed ? 'rgba(0,255,204,0.2)' : 'rgba(0,240,255,0.15)'}; color:${completed ? '#00ffcc' : '#00f0ff'}">
+                                    ${completed ? 'COMPLETED' : quest.category.toUpperCase()}
                                 </div>
-                            ` : ''}
+                            </div>
+                            <div style="margin:8px 0; opacity:0.8; font-size:0.9rem;">Target: ${quest.target}</div>
+                            ${!completed ? `<button onclick="completeQuest(${quest.id})" class="btn-system" style="width:100%; padding:10px; margin-top:8px; background:rgba(0,240,255,0.15); border:1px solid #00f0ff;">COMPLETE QUEST</button>` : ''}
                         </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function isNewDay() {
-            if (!hunter.dailyProtocol) return true;
-            return hunter.dailyProtocol.date !== new Date().toDateString();
-        }
-
-        function checkDailyReset() {
-            if (isNewDay()) {
-                hunter.fatigue = Math.max(0, hunter.fatigue - 40);
-                Object.keys(hunter.bodyStatus).forEach(part => {
-                    hunter.bodyStatus[part].fatigue = Math.max(0, hunter.bodyStatus[part].fatigue - 30);
+                    `;
                 });
-                if (hunter.lastActive) {
-                    const lastDate = new Date(hunter.lastActive);
-                    const today = new Date();
-                    const diffDays = Math.floor((today - lastDate) / (1000 * 60 * 60 * 24));
-                    if (diffDays > 1) {
-                        hunter.discipline = Math.max(0, hunter.discipline - (diffDays * 10));
-                        hunter.streak = 0;
-                    }
-                }
-                hunter.lastActive = new Date().toISOString();
+                document.getElementById('protocolContainer').innerHTML = html;
             }
+
+            // Fatigue warning
+            document.getElementById('fatigueWarning').style.display = hunter.fatigue > 75 ? 'block' : 'none';
         }
 
-        function setupInteractions() {
-            document.querySelectorAll('.body-part').forEach(part => {
-                part.addEventListener('click', () => {
-                    const partName = part.dataset.part;
-                    const status = hunter.bodyStatus[partName];
-                    showAlert(`${partName.toUpperCase()} STATUS<br>Fatigue: ${status.fatigue}%<br>Status: ${status.status.toUpperCase()}`, []);
-                });
-            });
-        }
-
-        function showAlert(message, rewards) {
-            document.getElementById('alertMessage').innerHTML = message;
-            const rewardsDiv = document.getElementById('alertRewards');
-            if (rewards.length > 0) {
-                rewardsDiv.innerHTML = rewards.map(r => `<div class="reward-item"><div class="reward-icon">${r.icon}</div><div class="reward-value">${r.value}</div><div style="font-size: 0.7rem; color: var(--system-dim);">${r.label}</div></div>`).join('');
-                rewardsDiv.style.display = 'flex';
-            } else {
-                rewardsDiv.style.display = 'none';
+        function showAlert(title, rewards = []) {
+            const overlay = document.getElementById('modalOverlay');
+            const alertBox = document.getElementById('systemAlert');
+            
+            let rewardHTML = '';
+            if (rewards.length) {
+                rewardHTML = `<div style="display:flex; justify-content:center; gap:25px; margin:20px 0;">` +
+                    rewards.map(r => `
+                        <div style="text-align:center;">
+                            <div style="font-size:2.2rem;">${r.icon}</div>
+                            <div style="font-family:Orbitron; font-size:1.3rem; color:#00ffcc;">${r.value}</div>
+                            <div style="font-size:0.75rem; opacity:0.7;">${r.label}</div>
+                        </div>
+                    `).join('') + `</div>`;
             }
-            document.getElementById('modalOverlay').classList.add('active');
-            document.getElementById('systemAlert').classList.add('active');
+
+            alertBox.innerHTML = `
+                <div style="font-family:Orbitron; font-size:1.6rem; margin-bottom:15px; color:#00f0ff;">${title}</div>
+                ${rewardHTML}
+                <button onclick="closeAlert()" style="width:100%; padding:14px; background:rgba(0,240,255,0.2); border:1px solid #00f0ff; color:white; font-family:Orbitron; letter-spacing:1px; margin-top:15px;">CONFIRM</button>
+            `;
+            overlay.style.display = 'flex';
         }
 
         function closeAlert() {
-            document.getElementById('modalOverlay').classList.remove('active');
-            document.getElementById('systemAlert').classList.remove('active');
+            document.getElementById('modalOverlay').style.display = 'none';
         }
 
         function openGoldModal() {
-            document.getElementById('goldInput').value = hunter.gold;
-            document.getElementById('modalOverlay').classList.add('active');
-            document.getElementById('goldModal').classList.add('active');
+            const amount = prompt("Enter new Gold amount:", hunter.gold);
+            if (amount !== null) {
+                hunter.gold = parseInt(amount) || 0;
+                saveData();
+                updateUI();
+            }
         }
 
-        function closeGoldModal() {
-            document.getElementById('modalOverlay').classList.remove('active');
-            document.getElementById('goldModal').classList.remove('active');
-        }
-
-        function updateGold() {
-            hunter.gold = parseInt(document.getElementById('goldInput').value) || 0;
-            saveData();
+        // Initialize
+        function init() {
+            loadData();
             updateUI();
-            closeGoldModal();
+
+            // Auto daily reset
+            const today = new Date().toDateString();
+            if (!hunter.lastReset || hunter.lastReset !== today) {
+                hunter.fatigue = Math.max(0, hunter.fatigue - 35);
+                hunter.lastReset = today;
+                if (!hunter.dailyProtocol) generateDailyProtocol();
+            }
+
+            // Keyboard shortcut for level up (dev)
+            document.addEventListener('keydown', e => {
+                if (e.ctrlKey && e.key === 'l') {
+                    addXP(500);
+                    e.preventDefault();
+                }
+            });
         }
 
         window.onload = init;
-        document.addEventListener('visibilitychange', () => { if (document.hidden) saveData(); });
     </script>
 </body>
 </html>
