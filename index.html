@@ -3,562 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CALISTHENICS SYSTEM | Bodyweight Progression Engine</title>
+    <title>SOLO LEVELING SYSTEM | PROTOCOL v3.0</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
-        
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         :root {
-            --primary: #00d4ff;
-            --primary-glow: rgba(0, 212, 255, 0.6);
-            --bg: #0a0e1a;
-            --panel: rgba(10, 20, 40, 0.95);
-            --border: rgba(0, 212, 255, 0.3);
-            --text: #e0f7ff;
-            --dim: #5a7a8a;
-            --success: #00ff88;
-            --warning: #ffaa00;
-            --danger: #ff0040;
-            --muscle-chest: #ff6b6b;
-            --muscle-back: #4ecdc4;
-            --muscle-shoulders: #ffe66d;
-            --muscle-arms: #a8e6cf;
-            --muscle-core: #fd79a8;
-            --muscle-legs: #a29bfe;
+            --system-blue: #00d4ff; --system-glow: rgba(0, 212, 255, 0.6);
+            --system-bg: #0a0e1a; --system-panel: rgba(10, 20, 40, 0.9);
+            --system-border: rgba(0, 212, 255, 0.3); --system-text: #e0f7ff;
+            --system-dim: #5a7a8a; --alert-red: #ff0040;
+            --success-cyan: #00ffcc; --warning-orange: #ff8800;
         }
-
         body {
             font-family: 'Rajdhani', sans-serif;
-            background: var(--bg);
-            color: var(--text);
+            background: var(--system-bg);
+            color: var(--system-text);
             min-height: 100vh;
             overflow-x: hidden;
         }
-
-        .system-frame {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            pointer-events: none;
-            z-index: 1000;
-        }
-
-        .frame-corner {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            border: 2px solid var(--primary);
-        }
-
-        .frame-corner.tl { top: 15px; left: 15px; border-right: none; border-bottom: none; }
-        .frame-corner.tr { top: 15px; right: 15px; border-left: none; border-bottom: none; }
-        .frame-corner.bl { bottom: 15px; left: 15px; border-right: none; border-top: none; }
-        .frame-corner.br { bottom: 15px; right: 15px; border-left: none; border-top: none; }
-
-        .scan-lines {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 212, 255, 0.02) 2px, rgba(0, 212, 255, 0.02) 4px);
-            pointer-events: none;
-            z-index: 999;
-        }
-
-        header {
-            background: linear-gradient(90deg, transparent 0%, rgba(0, 212, 255, 0.1) 50%, transparent 100%);
-            border-bottom: 1px solid var(--border);
-            padding: 12px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 800;
-            letter-spacing: 3px;
-            color: var(--primary);
-            text-shadow: 0 0 20px var(--primary-glow);
-        }
-
-        .logo span {
-            font-size: 0.7rem;
-            display: block;
-            color: var(--dim);
-            letter-spacing: 5px;
-        }
-
-        .stats-bar {
-            display: flex;
-            gap: 20px;
-        }
-
-        .stat-pill {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0, 20, 40, 0.6);
-            border: 1px solid var(--border);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
-        }
-
-        .stat-pill.gold { cursor: pointer; }
-        .stat-pill.gold:hover { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
-
-        .main-container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 25px;
-            display: grid;
-            grid-template-columns: 320px 1fr 420px;
-            gap: 25px;
-        }
-
-        .panel {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .panel-header {
-            background: linear-gradient(90deg, rgba(0, 212, 255, 0.1), rgba(0, 212, 255, 0.2));
-            padding: 14px 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
+        .system-frame { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 1000; }
+        .frame-corner { position: absolute; width: 60px; height: 60px; border: 2px solid var(--system-blue); }
+        .frame-corner.tl { top: 20px; left: 20px; border-right: none; border-bottom: none; box-shadow: -2px -2px 10px var(--system-glow); }
+        .frame-corner.tr { top: 20px; right: 20px; border-left: none; border-bottom: none; box-shadow: 2px -2px 10px var(--system-glow); }
+        .frame-corner.bl { bottom: 20px; left: 20px; border-right: none; border-top: none; box-shadow: -2px 2px 10px var(--system-glow); }
+        .frame-corner.br { bottom: 20px; right: 20px; border-left: none; border-top: none; box-shadow: 2px 2px 10px var(--system-glow); }
+        .scan-lines { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 212, 255, 0.03) 2px, rgba(0, 212, 255, 0.03) 4px); pointer-events: none; z-index: 999; animation: scanMove 10s linear infinite; }
+        @keyframes scanMove { 0% { transform: translateY(0); } 100% { transform: translateY(4px); } }
+        .system-header { background: linear-gradient(90deg, transparent 0%, rgba(0, 212, 255, 0.1) 20%, rgba(0, 212, 255, 0.2) 50%, rgba(0, 212, 255, 0.1) 80%, transparent 100%); border-bottom: 1px solid var(--system-border); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: relative; }
+        .system-header::before { content: ''; position: absolute; bottom: -1px; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg, transparent, var(--system-blue), transparent); box-shadow: 0 0 10px var(--system-glow); }
+        .hunter-info { display: flex; align-items: center; gap: 20px; }
+        .hunter-avatar { width: 50px; height: 50px; border: 2px solid var(--system-blue); border-radius: 50%; background: rgba(0, 212, 255, 0.1); display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); position: relative; }
+        .hunter-avatar::after { content: ''; position: absolute; inset: -5px; border: 1px solid var(--system-blue); border-radius: 50%; opacity: 0.5; animation: pulseRing 2s infinite; }
+        @keyframes pulseRing { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 0; } }
+        .hunter-details h1 { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--system-blue); text-shadow: 0 0 10px var(--system-glow); }
+        .hunter-title { font-size: 0.85rem; color: var(--system-dim); letter-spacing: 1px; }
+        .system-resources { display: flex; gap: 20px; align-items: center; }
+        .resource-box { display: flex; align-items: center; gap: 8px; background: rgba(0, 20, 40, 0.6); border: 1px solid var(--system-border); padding: 8px 15px; border-radius: 4px; position: relative; overflow: hidden; }
+        .resource-box::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent); animation: resourceShine 3s infinite; }
+        @keyframes resourceShine { 0% { left: -100%; } 50%, 100% { left: 100%; } }
+        .resource-icon { font-size: 1.2rem; filter: drop-shadow(0 0 5px var(--system-glow)); }
+        .resource-value { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--system-blue); }
+        .resource-label { font-size: 0.7rem; color: var(--system-dim); text-transform: uppercase; letter-spacing: 1px; }
+        .phase-indicator { position: fixed; top: 80px; right: 30px; background: rgba(0, 0, 0, 0.8); border: 1px solid var(--system-border); padding: 10px 20px; border-radius: 20px; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; letter-spacing: 2px; z-index: 100; }
+        .main-container { max-width: 1400px; margin: 0 auto; padding: 30px; display: grid; grid-template-columns: 280px 1fr 380px; gap: 25px; position: relative; z-index: 1; }
+        .system-panel { background: var(--system-panel); border: 1px solid var(--system-border); border-radius: 8px; position: relative; overflow: hidden; backdrop-filter: blur(10px); }
+        .system-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--system-blue), transparent); box-shadow: 0 0 10px var(--system-glow); }
+        .panel-header { background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0.2) 50%, rgba(0, 212, 255, 0.1) 100%); padding: 12px 20px; border-bottom: 1px solid var(--system-border); font-family: 'Orbitron', sans-serif; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+        .panel-header::before { content: '◆'; color: var(--system-blue); animation: diamondPulse 2s infinite; }
+        @keyframes diamondPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
         .panel-content { padding: 20px; }
-
-        /* Body Visual */
-        .body-container {
-            position: relative;
-            height: 450px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .muscle-group {
-            cursor: pointer;
-            transition: all 0.3s ease;
-            filter: drop-shadow(0 0 3px currentColor);
-        }
-
-        .muscle-group:hover {
-            filter: drop-shadow(0 0 12px currentColor) brightness(1.4);
-            transform: scale(1.03);
-        }
-
-        .muscle-fatigue-0 { fill: rgba(0, 212, 255, 0.4); stroke: var(--primary); stroke-width: 1.5; }
-        .muscle-fatigue-1 { fill: rgba(0, 255, 136, 0.5); stroke: var(--success); stroke-width: 2; }
-        .muscle-fatigue-2 { fill: rgba(255, 170, 0, 0.5); stroke: var(--warning); stroke-width: 2; }
-        .muscle-fatigue-3 { fill: rgba(255, 0, 64, 0.6); stroke: var(--danger); stroke-width: 2.5; animation: pulse-danger 1.5s infinite; }
-
-        @keyframes pulse-danger {
-            0%, 100% { stroke-opacity: 1; }
-            50% { stroke-opacity: 0.4; }
-        }
-
-        .muscle-tooltip {
-            position: absolute;
-            background: rgba(5, 10, 20, 0.98);
-            border: 1px solid var(--border);
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s;
-            z-index: 100;
-            box-shadow: 0 0 20px rgba(0,0,0,0.8);
-        }
-
-        .muscle-tooltip.active { opacity: 1; }
-
-        /* Center Panel - Progression */
-        .progression-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .level-display {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 4rem;
-            font-weight: 900;
-            color: var(--primary);
-            text-shadow: 0 0 30px var(--primary-glow);
-            line-height: 1;
-        }
-
-        .rank-badge {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 6px 20px;
-            border: 2px solid var(--primary);
-            border-radius: 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
-            letter-spacing: 3px;
-            background: rgba(0, 212, 255, 0.1);
-        }
-
-        .xp-container {
-            margin: 20px 0;
-        }
-
-        .xp-bar-bg {
-            height: 10px;
-            background: rgba(0,0,0,0.5);
-            border-radius: 5px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-
-        .xp-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--success));
-            border-radius: 4px;
-            transition: width 0.5s ease;
-            box-shadow: 0 0 10px var(--primary-glow);
-        }
-
-        .xp-text {
-            text-align: center;
-            margin-top: 8px;
-            font-size: 0.85rem;
-            color: var(--dim);
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        /* Skill Tree */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .skill-node {
-            background: rgba(0, 20, 40, 0.6);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .skill-node:hover {
-            border-color: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.2);
-        }
-
-        .skill-node.maxed {
-            border-color: var(--success);
-            background: rgba(0, 255, 136, 0.1);
-        }
-
-        .skill-icon {
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-
-        .skill-name {
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .skill-level {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
-            color: var(--primary);
-        }
-
-        .skill-progress {
-            height: 4px;
-            background: rgba(0,0,0,0.5);
-            border-radius: 2px;
-            margin-top: 8px;
-            overflow: hidden;
-        }
-
-        .skill-progress-bar {
-            height: 100%;
-            background: var(--primary);
-            border-radius: 2px;
-            transition: width 0.3s;
-        }
-
-        /* Workout Panel */
-        .workout-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .tab-btn {
-            padding: 10px 18px;
-            background: rgba(0, 20, 40, 0.6);
-            border: 1px solid var(--border);
-            color: var(--text);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border-radius: 5px;
-            text-transform: uppercase;
-        }
-
-        .tab-btn:hover, .tab-btn.active {
-            background: rgba(0, 212, 255, 0.2);
-            border-color: var(--primary);
-            box-shadow: 0 0 15px var(--primary-glow);
-        }
-
-        .exercise-card {
-            background: rgba(0, 10, 20, 0.6);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 18px;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-        }
-
-        .exercise-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
-        }
-
-        .exercise-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .exercise-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .exercise-tier {
-            font-size: 0.7rem;
-            padding: 3px 10px;
-            border-radius: 12px;
-            border: 1px solid;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .tier-1 { color: #9ca3af; border-color: #9ca3af; }
-        .tier-2 { color: #22c55e; border-color: #22c55e; }
-        .tier-3 { color: #3b82f6; border-color: #3b82f6; }
-        .tier-4 { color: #a855f7; border-color: #a855f7; }
-        .tier-5 { color: #f59e0b; border-color: #f59e0b; }
-        .tier-6 { color: #ef4444; border-color: #ef4444; }
-
-        .exercise-target {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-            padding: 12px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-        }
-
-        .target-display {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            color: var(--primary);
-            min-width: 80px;
-            text-align: center;
-        }
-
-        .target-label {
-            font-size: 0.8rem;
-            color: var(--dim);
-            text-transform: uppercase;
-        }
-
-        .exercise-muscles {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        .muscle-tag {
-            font-size: 0.7rem;
-            padding: 4px 10px;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.1);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .exercise-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), #0066cc);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            box-shadow: 0 0 20px var(--primary-glow);
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: rgba(255,255,255,0.1);
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.2);
-        }
-
-        .btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        /* Fatigue Warning */
-        .fatigue-alert {
-            background: rgba(255, 0, 64, 0.15);
-            border: 1px solid var(--danger);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            text-align: center;
-            display: none;
-        }
-
-        .fatigue-alert.active {
-            display: block;
-            animation: alert-pulse 2s infinite;
-        }
-
-        @keyframes alert-pulse {
-            0%, 100% { box-shadow: 0 0 5px rgba(255, 0, 64, 0.3); }
-            50% { box-shadow: 0 0 20px rgba(255, 0, 64, 0.6); }
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 2000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            background: var(--panel);
-            border: 2px solid var(--primary);
-            border-radius: 15px;
-            padding: 30px;
-            min-width: 400px;
-            z-index: 2001;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s;
-            box-shadow: 0 0 50px var(--primary-glow);
-        }
-
-        .modal.active {
-            opacity: 1;
-            pointer-events: all;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .modal-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.3rem;
-            text-align: center;
-            margin-bottom: 20px;
-            color: var(--primary);
-        }
-
-        .gold-input {
-            width: 100%;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid var(--border);
-            color: var(--primary);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            text-align: center;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }
-
-        /* Responsive */
-        @media (max-width: 1400px) {
-            .main-container { grid-template-columns: 280px 1fr 380px; }
-        }
-
-        @media (max-width: 1200px) {
-            .main-container { grid-template-columns: 1fr 1fr; }
-            .panel:last-child { grid-column: 1 / -1; }
-        }
-
-        @media (max-width: 768px) {
-            .main-container { grid-template-columns: 1fr; padding: 15px; }
-            .skills-grid { grid-template-columns: repeat(2, 1fr); }
-            .level-display { font-size: 3rem; }
-        }
-
-        /* Animations */
-        @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.98; }
-        }
-        .panel { animation: flicker 4s infinite; }
+        .body-visual { height: 380px; position: relative; display: flex; align-items: center; justify-content: center; }
+        .body-scan-line { position: absolute; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--system-blue), transparent); box-shadow: 0 0 10px var(--system-glow); animation: bodyScan 3s ease-in-out infinite; pointer-events: none; }
+        @keyframes bodyScan { 0%, 100% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+        .body-part { cursor: pointer; transition: all 0.3s; filter: drop-shadow(0 0 5px currentColor); }
+        .body-part:hover { filter: drop-shadow(0 0 15px currentColor) brightness(1.3); transform: scale(1.02); }
+        .status-normal { fill: rgba(0, 212, 255, 0.3); stroke: var(--system-blue); stroke-width: 1; }
+        .status-active { fill: rgba(0, 255, 200, 0.4); stroke: var(--success-cyan); stroke-width: 2; animation: activePulse 1.5s infinite; }
+        .status-fatigue { fill: rgba(255, 136, 0, 0.3); stroke: var(--warning-orange); stroke-width: 1; }
+        .status-injured { fill: rgba(255, 0, 64, 0.3); stroke: var(--alert-red); stroke-width: 2; animation: injuredPulse 1s infinite; }
+        @keyframes activePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        @keyframes injuredPulse { 0%, 100% { stroke-opacity: 1; } 50% { stroke-opacity: 0.3; } }
+        .status-window { text-align: center; }
+        .level-display { margin-bottom: 20px; }
+        .level-number { font-family: 'Orbitron', sans-serif; font-size: 4.5rem; font-weight: 900; color: var(--system-blue); text-shadow: 0 0 30px var(--system-glow); line-height: 1; position: relative; display: inline-block; }
+        .level-number::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--system-blue); box-shadow: 0 0 10px var(--system-glow); }
+        .xp-bar-container { margin: 15px 0; padding: 0 20px; }
+        .xp-bar-wrapper { height: 8px; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--system-border); border-radius: 4px; overflow: hidden; position: relative; }
+        .xp-bar-fill { height: 100%; background: linear-gradient(90deg, #0066cc, var(--system-blue)); transition: width 0.5s ease; box-shadow: 0 0 10px var(--system-glow); }
+        .xp-text { font-size: 0.8rem; color: var(--system-dim); margin-top: 5px; font-family: 'Orbitron', sans-serif; }
+        .rank-title { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; color: var(--success-cyan); text-shadow: 0 0 15px rgba(0, 255, 200, 0.5); margin-bottom: 5px; letter-spacing: 3px; }
+        .job-title { font-size: 0.85rem; color: var(--system-dim); letter-spacing: 2px; margin-bottom: 25px; }
+        .resource-bars { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; padding: 0 10px; }
+        .bar-container { display: flex; align-items: center; gap: 12px; }
+        .bar-icon { font-size: 1.3rem; width: 25px; text-align: center; }
+        .bar-wrapper { flex: 1; height: 22px; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--system-border); border-radius: 3px; position: relative; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; position: relative; overflow: hidden; }
+        .bar-fill::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation: barShine 2s infinite; }
+        @keyframes barShine { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+        .hp-fill { background: linear-gradient(90deg, #ff0040, #ff4080); }
+        .mp-fill { background: linear-gradient(90deg, #0066cc, var(--system-blue)); }
+        .fatigue-fill { background: linear-gradient(90deg, #ff8800, #ffaa00); }
+        .bar-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Orbitron', sans-serif; font-size: 0.75rem; font-weight: 600; text-shadow: 0 0 5px rgba(0,0,0,0.8); z-index: 2; }
+        .stats-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+        .stat-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; background: rgba(0, 20, 40, 0.4); border: 1px solid var(--system-border); border-radius: 4px; transition: all 0.3s; }
+        .stat-row:hover { background: rgba(0, 212, 255, 0.1); border-color: var(--system-blue); box-shadow: 0 0 15px rgba(0, 212, 255, 0.2); }
+        .stat-left { display: flex; align-items: center; gap: 10px; }
+        .stat-icon { font-size: 1.1rem; filter: drop-shadow(0 0 5px var(--system-glow)); }
+        .stat-name { font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; }
+        .stat-value-box { display: flex; align-items: center; gap: 6px; font-family: 'Orbitron', sans-serif; }
+        .stat-value { font-size: 1.1rem; font-weight: 700; color: var(--system-blue); }
+        .stat-bonus { font-size: 0.75rem; color: var(--success-cyan); }
+        .protocol-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--system-border); }
+        .protocol-title { font-family: 'Orbitron', sans-serif; font-size: 1rem; color: var(--system-blue); }
+        .protocol-progress { font-size: 0.8rem; color: var(--system-dim); }
+        .quest-category { margin-bottom: 15px; }
+        .category-header { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--system-dim); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .category-icon { font-size: 1rem; }
+        .quest-card { background: rgba(0, 10, 20, 0.6); border: 1px solid var(--system-border); border-radius: 6px; padding: 12px; position: relative; overflow: hidden; transition: all 0.3s; margin-bottom: 8px; }
+        .quest-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--system-blue); box-shadow: 0 0 10px var(--system-glow); }
+        .quest-card.completed { opacity: 0.6; border-color: var(--success-cyan); }
+        .quest-card.completed::before { background: var(--success-cyan); }
+        .quest-card.blocked { opacity: 0.4; border-color: var(--alert-red); }
+        .quest-card.blocked::before { background: var(--alert-red); }
+        .quest-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .quest-name { font-weight: 600; font-size: 0.95rem; }
+        .quest-difficulty { font-size: 0.7rem; padding: 2px 8px; border-radius: 3px; border: 1px solid; font-family: 'Orbitron', sans-serif; }
+        .quest-desc { font-size: 0.8rem; color: var(--system-dim); margin-bottom: 8px; }
+        .quest-impact { display: flex; gap: 12px; font-size: 0.75rem; }
+        .impact-item { display: flex; align-items: center; gap: 4px; }
+        .impact-positive { color: var(--success-cyan); }
+        .impact-negative { color: var(--alert-red); }
+        .quest-actions { display: flex; gap: 8px; margin-top: 10px; }
+        .btn-system { flex: 1; padding: 8px; background: rgba(0, 212, 255, 0.1); border: 1px solid var(--system-border); color: var(--system-blue); font-family: 'Orbitron', sans-serif; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
+        .btn-system:hover:not(:disabled) { background: rgba(0, 212, 255, 0.2); border-color: var(--system-blue); box-shadow: 0 0 15px var(--system-glow); }
+        .btn-system:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-system.complete { background: rgba(0, 255, 200, 0.2); border-color: var(--success-cyan); color: var(--success-cyan); }
+        .fatigue-warning { background: rgba(255, 0, 64, 0.2); border: 1px solid var(--alert-red); padding: 10px; border-radius: 6px; margin-bottom: 15px; text-align: center; font-size: 0.85rem; color: var(--alert-red); display: none; }
+        .fatigue-warning.active { display: block; animation: warningPulse 2s infinite; }
+        @keyframes warningPulse { 0%, 100% { box-shadow: 0 0 5px rgba(255, 0, 64, 0.5); } 50% { box-shadow: 0 0 20px rgba(255, 0, 64, 0.8); } }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); z-index: 1500; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .system-alert { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: rgba(5, 10, 20, 0.98); border: 2px solid var(--system-blue); border-radius: 12px; padding: 35px; text-align: center; z-index: 2000; opacity: 0; transition: all 0.3s; box-shadow: 0 0 60px var(--system-glow); min-width: 420px; max-width: 90vw; }
+        .system-alert.active { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        .alert-header { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; color: var(--system-blue); margin-bottom: 20px; text-shadow: 0 0 20px var(--system-glow); letter-spacing: 3px; }
+        .alert-message { font-size: 1.1rem; margin-bottom: 25px; line-height: 1.6; }
+        .alert-rewards { display: flex; justify-content: center; gap: 25px; margin-bottom: 25px; padding: 20px; background: rgba(0, 212, 255, 0.1); border-radius: 8px; }
+        .reward-item { text-align: center; }
+        .reward-icon { font-size: 2rem; margin-bottom: 5px; }
+        .reward-value { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--success-cyan); }
+        .gold-input { width: 100%; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--system-border); color: var(--system-blue); font-family: 'Orbitron', sans-serif; font-size: 2rem; text-align: center; padding: 15px; margin: 20px 0; border-radius: 5px; }
+        @media (max-width: 1200px) { .main-container { grid-template-columns: 250px 1fr 320px; } }
+        @media (max-width: 968px) { .main-container { grid-template-columns: 1fr; gap: 20px; } .phase-indicator { position: relative; top: 0; right: 0; margin: 10px; text-align: center; } .level-number { font-size: 3.5rem; } .stats-container { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { .system-resources { flex-wrap: wrap; justify-content: center; } .main-container { padding: 15px; } .system-alert { min-width: 90%; padding: 25px; } .alert-rewards { flex-wrap: wrap; gap: 15px; } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 10, 20, 0.5); }
+        ::-webkit-scrollbar-thumb { background: var(--system-blue); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--success-cyan); }
+        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.98; } }
+        .system-panel { animation: flicker 5s infinite; }
     </style>
+<base target="_blank">
 </head>
 <body>
     <div class="system-frame">
@@ -569,560 +153,510 @@
     </div>
     <div class="scan-lines"></div>
 
-    <header>
-        <div class="logo">
-            CALISTHENICS
-            <span>BODYWEIGHT SYSTEM</span>
+    <div class="phase-indicator" id="phaseIndicator">PHASE 1: FOUNDATION</div>
+
+    <header class="system-header">
+        <div class="hunter-info">
+            <div class="hunter-avatar">👤</div>
+            <div class="hunter-details">
+                <h1 id="hunterName">HUNTER</h1>
+                <div class="hunter-title" id="hunterTitle">The One Who Overcame Adversity</div>
+            </div>
         </div>
-        <div class="stats-bar">
-            <div class="stat-pill gold" onclick="openGoldModal()">
-                <span>🪙</span>
-                <span id="goldDisplay">0</span>
+        <div class="system-resources">
+            <div class="resource-box" onclick="openGoldModal()" style="cursor: pointer;">
+                <span class="resource-icon">🪙</span>
+                <div><div class="resource-value" id="goldDisplay">0</div><div class="resource-label">GOLD</div></div>
             </div>
-            <div class="stat-pill">
-                <span>🔥</span>
-                <span id="streakDisplay">0</span>
+            <div class="resource-box">
+                <span class="resource-icon">🔥</span>
+                <div><div class="resource-value" id="streakDisplay">0</div><div class="resource-label">STREAK</div></div>
             </div>
-            <div class="stat-pill">
-                <span>⚡</span>
-                <span id="energyDisplay">100%</span>
+            <div class="resource-box">
+                <span class="resource-icon">⚡</span>
+                <div><div class="resource-value" id="disciplineDisplay">100</div><div class="resource-label">DISCIPLINE</div></div>
             </div>
         </div>
     </header>
 
     <div class="main-container">
-        <!-- Left: Body Visual -->
-        <div class="panel">
-            <div class="panel-header">MUSCLE STATUS</div>
+        <div class="system-panel">
+            <div class="panel-header">BODY STATUS</div>
             <div class="panel-content">
-                <div class="body-container">
-                    <svg width="220" height="420" viewBox="0 0 200 400">
-                        <!-- Head -->
-                        <circle class="muscle-group muscle-fatigue-0" data-muscle="neck" cx="100" cy="25" r="18" />
-                        
-                        <!-- Chest -->
-                        <path class="muscle-group muscle-fatigue-0" data-muscle="chest" 
-                              d="M 70 55 Q 100 45 130 55 L 125 95 Q 100 105 75 95 Z" />
-                        
-                        <!-- Shoulders -->
-                        <ellipse class="muscle-group muscle-fatigue-0" data-muscle="shoulders" cx="55" cy="60" rx="20" ry="12" />
-                        <ellipse class="muscle-group muscle-fatigue-0" data-muscle="shoulders" cx="145" cy="60" rx="20" ry="12" />
-                        
-                        <!-- Arms Upper -->
-                        <rect class="muscle-group muscle-fatigue-0" data-muscle="arms" x="30" y="70" width="22" height="45" rx="10" transform="rotate(15 41 92)" />
-                        <rect class="muscle-group muscle-fatigue-0" data-muscle="arms" x="148" y="70" width="22" height="45" rx="10" transform="rotate(-15 159 92)" />
-                        
-                        <!-- Arms Lower -->
-                        <rect class="muscle-group muscle-fatigue-0" data-muscle="arms" x="25" y="115" width="18" height="40" rx="8" transform="rotate(10 34 135)" />
-                        <rect class="muscle-group muscle-fatigue-0" data-muscle="arms" x="157" y="115" width="18" height="40" rx="8" transform="rotate(-10 166 135)" />
-                        
-                        <!-- Core/Abs -->
-                        <rect class="muscle-group muscle-fatigue-0" data-muscle="core" x="78" y="100" width="44" height="70" rx="12" />
-                        
-                        <!-- Back (behind, lighter) -->
-                        <path class="muscle-group muscle-fatigue-0" data-muscle="back" 
-                              d="M 65 55 L 135 55 L 140 110 Q 100 120 60 110 Z" opacity="0.6" />
-                        
-                        <!-- Legs Upper -->
-                        <path class="muscle-group muscle-fatigue-0" data-muscle="legs" 
-                              d="M 75 175 L 100 175 L 98 250 L 77 250 Z" rx="10" />
-                        <path class="muscle-group muscle-fatigue-0" data-muscle="legs" 
-                              d="M 100 175 L 125 175 L 123 250 L 102 250 Z" rx="10" />
-                        
-                        <!-- Legs Lower -->
-                        <rect class="muscle-group muscle-fatigue-0" data-muscle="legs" x="77" y="255" width="21" height="60" rx="8" />
-                        <rect class="muscle-group muscle-fatigue-0" data-muscle="legs" x="102" y="255" width="21" height="60" rx="8" />
-                        
-                        <!-- Connection lines -->
-                        <line x1="100" y1="43" x2="100" y2="55" stroke="var(--primary)" stroke-width="2" opacity="0.4" />
-                        <line x1="55" y1="60" x2="70" y2="60" stroke="var(--primary)" stroke-width="1.5" opacity="0.4" />
-                        <line x1="145" y1="60" x2="130" y2="60" stroke="var(--primary)" stroke-width="1.5" opacity="0.4" />
+                <div class="body-visual">
+                    <div class="body-scan-line"></div>
+                    <svg width="180" height="360" viewBox="0 0 200 400">
+                        <circle class="body-part status-normal" data-part="head" cx="100" cy="30" r="22" />
+                        <rect class="body-part status-normal" data-part="neck" x="88" y="52" width="24" height="16" rx="5" />
+                        <ellipse class="body-part status-normal" data-part="shoulders" cx="65" cy="80" rx="28" ry="14" />
+                        <ellipse class="body-part status-normal" data-part="shoulders" cx="135" cy="80" rx="28" ry="14" />
+                        <rect class="body-part status-normal" data-part="chest" x="70" y="92" width="60" height="45" rx="12" />
+                        <rect class="body-part status-normal" data-part="abs" x="75" y="142" width="50" height="55" rx="8" />
+                        <rect class="body-part status-normal" data-part="arms" x="38" y="92" width="22" height="45" rx="8" transform="rotate(-12 49 115)" />
+                        <rect class="body-part status-normal" data-part="arms" x="140" y="92" width="22" height="45" rx="8" transform="rotate(12 151 115)" />
+                        <rect class="body-part status-normal" data-part="arms" x="28" y="138" width="20" height="40" rx="6" transform="rotate(-8 38 158)" />
+                        <rect class="body-part status-normal" data-part="arms" x="152" y="138" width="20" height="40" rx="6" transform="rotate(8 162 158)" />
+                        <rect class="body-part status-normal" data-part="back" x="65" y="92" width="70" height="55" rx="10" opacity="0.4" />
+                        <rect class="body-part status-normal" data-part="legs" x="70" y="200" width="26" height="70" rx="12" />
+                        <rect class="body-part status-normal" data-part="legs" x="104" y="200" width="26" height="70" rx="12" />
+                        <rect class="body-part status-normal" data-part="legs" x="72" y="275" width="22" height="60" rx="8" />
+                        <rect class="body-part status-normal" data-part="legs" x="106" y="275" width="22" height="60" rx="8" />
+                        <line x1="100" y1="52" x2="100" y2="92" stroke="var(--system-blue)" stroke-width="2" opacity="0.5" />
+                        <line x1="65" y1="80" x2="75" y2="92" stroke="var(--system-blue)" stroke-width="1.5" opacity="0.5" />
+                        <line x1="135" y1="80" x2="125" y2="92" stroke="var(--system-blue)" stroke-width="1.5" opacity="0.5" />
                     </svg>
-                    <div class="muscle-tooltip" id="muscleTooltip"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Center: Progression -->
-        <div class="panel">
-            <div class="panel-header">PROGRESSION</div>
+        <div class="system-panel">
+            <div class="panel-header">STATUS WINDOW</div>
             <div class="panel-content">
-                <div class="progression-header">
-                    <div class="level-display" id="levelDisplay">1</div>
-                    <div class="rank-badge" id="rankDisplay">BEGINNER</div>
-                </div>
+                <div class="status-window">
+                    <div class="level-display">
+                        <div class="level-number" id="levelDisplay">1</div>
+                    </div>
+                    <div class="xp-bar-container">
+                        <div class="xp-bar-wrapper"><div class="xp-bar-fill" id="xpBar" style="width: 0%"></div></div>
+                        <div class="xp-text" id="xpText">0 / 100 XP</div>
+                    </div>
+                    <div class="rank-title" id="rankDisplay">E-RANK</div>
+                    <div class="job-title" id="jobDisplay">Novice Hunter</div>
 
-                <div class="xp-container">
-                    <div class="xp-bar-bg">
-                        <div class="xp-bar-fill" id="xpBar" style="width: 0%"></div>
+                    <div class="resource-bars">
+                        <div class="bar-container">
+                            <div class="bar-icon">❤️</div>
+                            <div class="bar-wrapper"><div class="bar-fill hp-fill" id="hpBar" style="width: 100%"></div><div class="bar-text" id="hpText">100/100</div></div>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar-icon">💧</div>
+                            <div class="bar-wrapper"><div class="bar-fill mp-fill" id="mpBar" style="width: 100%"></div><div class="bar-text" id="mpText">100/100</div></div>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar-icon">⚡</div>
+                            <div class="bar-wrapper"><div class="bar-fill fatigue-fill" id="fatigueBar" style="width: 0%"></div><div class="bar-text" id="fatigueText">0/100</div></div>
+                        </div>
                     </div>
-                    <div class="xp-text" id="xpText">0 / 100 XP</div>
-                </div>
 
-                <div class="skills-grid">
-                    <div class="skill-node" id="skill-pushup">
-                        <div class="skill-icon">💪</div>
-                        <div class="skill-name">Push-Up</div>
-                        <div class="skill-level" id="pushupLevel">Lv.1</div>
-                        <div class="skill-progress">
-                            <div class="skill-progress-bar" id="pushupProgress" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-node" id="skill-pullup">
-                        <div class="skill-icon">🎯</div>
-                        <div class="skill-name">Pull-Up</div>
-                        <div class="skill-level" id="pullupLevel">Lv.1</div>
-                        <div class="skill-progress">
-                            <div class="skill-progress-bar" id="pullupProgress" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-node" id="skill-squat">
-                        <div class="skill-icon">🦵</div>
-                        <div class="skill-name">Squat</div>
-                        <div class="skill-level" id="squatLevel">Lv.1</div>
-                        <div class="skill-progress">
-                            <div class="skill-progress-bar" id="squatProgress" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-node" id="skill-dip">
-                        <div class="skill-icon">🔻</div>
-                        <div class="skill-name">Dip</div>
-                        <div class="skill-level" id="dipLevel">Lv.1</div>
-                        <div class="skill-progress">
-                            <div class="skill-progress-bar" id="dipProgress" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-node" id="skill-core">
-                        <div class="skill-icon">🎯</div>
-                        <div class="skill-name">Core</div>
-                        <div class="skill-level" id="coreLevel">Lv.1</div>
-                        <div class="skill-progress">
-                            <div class="skill-progress-bar" id="coreProgress" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-node" id="skill-cardio">
-                        <div class="skill-icon">🏃</div>
-                        <div class="skill-name">Cardio</div>
-                        <div class="skill-level" id="cardioLevel">Lv.1</div>
-                        <div class="skill-progress">
-                            <div class="skill-progress-bar" id="cardioProgress" style="width: 0%"></div>
-                        </div>
+                    <div class="stats-container">
+                        <div class="stat-row"><div class="stat-left"><span class="stat-icon">💪</span><span class="stat-name">STR</span></div><div class="stat-value-box"><span class="stat-value" id="strValue">10</span><span class="stat-bonus" id="strBonus"></span></div></div>
+                        <div class="stat-row"><div class="stat-left"><span class="stat-icon">❤️</span><span class="stat-name">VIT</span></div><div class="stat-value-box"><span class="stat-value" id="vitValue">10</span><span class="stat-bonus" id="vitBonus"></span></div></div>
+                        <div class="stat-row"><div class="stat-left"><span class="stat-icon">🏃</span><span class="stat-name">AGI</span></div><div class="stat-value-box"><span class="stat-value" id="agiValue">10</span><span class="stat-bonus" id="agiBonus"></span></div></div>
+                        <div class="stat-row"><div class="stat-left"><span class="stat-icon">🧠</span><span class="stat-name">INT</span></div><div class="stat-value-box"><span class="stat-value" id="intValue">10</span><span class="stat-bonus" id="intBonus"></span></div></div>
+                        <div class="stat-row"><div class="stat-left"><span class="stat-icon">👁️</span><span class="stat-name">PER</span></div><div class="stat-value-box"><span class="stat-value" id="perValue">10</span><span class="stat-bonus" id="perBonus"></span></div></div>
+                        <div class="stat-row"><div class="stat-left"><span class="stat-icon">🎯</span><span class="stat-name">AP</span></div><div class="stat-value-box"><span class="stat-value" id="apValue">0</span><span class="stat-bonus">Available</span></div></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Right: Workout -->
-        <div class="panel">
-            <div class="panel-header">TRAINING PROTOCOL</div>
+        <div class="system-panel">
+            <div class="panel-header">DAILY PROTOCOL</div>
             <div class="panel-content">
-                <div class="fatigue-alert" id="fatigueAlert">
-                    ⚠️ MUSCLE FATIGUE CRITICAL - REST REQUIRED
+                <div class="fatigue-warning" id="fatigueWarning">⚠️ FATIGUE CRITICAL - RECOVERY REQUIRED</div>
+                <div class="protocol-header">
+                    <span class="protocol-title">TODAY'S OBJECTIVES</span>
+                    <span class="protocol-progress" id="protocolProgress">0/4</span>
                 </div>
-
-                <div class="workout-tabs">
-                    <button class="tab-btn active" onclick="switchTab('push')">PUSH</button>
-                    <button class="tab-btn" onclick="switchTab('pull')">PULL</button>
-                    <button class="tab-btn" onclick="switchTab('legs')">LEGS</button>
-                    <button class="tab-btn" onclick="switchTab('core')">CORE</button>
-                </div>
-
-                <div id="exerciseContainer">
-                    <!-- Generated by JS -->
-                </div>
+                <div id="protocolContainer"></div>
+                <button class="btn-system" onclick="generateDailyProtocol()" style="width: 100%; margin-top: 15px;">🔄 GENERATE NEW PROTOCOL</button>
             </div>
         </div>
     </div>
 
-    <!-- Gold Modal -->
     <div class="modal-overlay" id="modalOverlay"></div>
-    <div class="modal" id="goldModal">
-        <div class="modal-title">🪙 UPDATE GOLD</div>
+    <div class="system-alert" id="systemAlert">
+        <div class="alert-header" id="alertHeader">⚡ SYSTEM MESSAGE</div>
+        <div class="alert-message" id="alertMessage"></div>
+        <div class="alert-rewards" id="alertRewards"></div>
+        <button class="btn-system" onclick="closeAlert()" style="width: 100%;">CONFIRM</button>
+    </div>
+
+    <div class="system-alert" id="goldModal">
+        <div class="alert-header">🪙 UPDATE GOLD</div>
         <input type="number" class="gold-input" id="goldInput" value="0">
         <div style="display: flex; gap: 10px;">
-            <button class="btn btn-secondary" onclick="closeGoldModal()" style="flex: 1;">CANCEL</button>
-            <button class="btn btn-primary" onclick="updateGold()" style="flex: 1;">UPDATE</button>
+            <button class="btn-system" onclick="closeGoldModal()" style="flex: 1;">CANCEL</button>
+            <button class="btn-system" onclick="updateGold()" style="flex: 1;">UPDATE</button>
         </div>
     </div>
 
     <script>
-        // === CALISTHENICS PROGRESSION SYSTEM ===
-        
-        const EXERCISE_DB = {
-            push: [
-                { id: 'pushup', name: 'Push-Up', tier: 1, baseReps: 10, muscles: ['chest', 'shoulders', 'arms'], xp: 10 },
-                { id: 'diamond', name: 'Diamond Push-Up', tier: 2, baseReps: 8, muscles: ['chest', 'arms'], xp: 15 },
-                { id: 'wide', name: 'Wide Push-Up', tier: 2, baseReps: 12, muscles: ['chest', 'shoulders'], xp: 15 },
-                { id: 'pike', name: 'Pike Push-Up', tier: 3, baseReps: 8, muscles: ['shoulders', 'arms'], xp: 20 },
-                { id: 'archer', name: 'Archer Push-Up', tier: 3, baseReps: 6, muscles: ['chest', 'arms'], xp: 25 },
-                { id: 'dips', name: 'Parallel Bar Dips', tier: 3, baseReps: 8, muscles: ['chest', 'arms'], xp: 20 },
-                { id: 'pseudo', name: 'Pseudo Planche Push-Up', tier: 4, baseReps: 5, muscles: ['chest', 'shoulders', 'core'], xp: 35 },
-                { id: 'handstand', name: 'Handstand Push-Up', tier: 5, baseReps: 3, muscles: ['shoulders', 'arms', 'core'], xp: 50 },
-                { id: 'planche', name: 'Planche Push-Up', tier: 6, baseReps: 2, muscles: ['chest', 'shoulders', 'core', 'arms'], xp: 80 },
-                { id: 'maltese', name: 'Maltese Push-Up', tier: 6, baseReps: 1, muscles: ['chest', 'shoulders', 'core'], xp: 100 }
+        const SYSTEM_CONFIG = {
+            MAX_LEVEL: 1000,
+            PHASES: [
+                { name: "FOUNDATION", min: 1, max: 100, color: "#00ff88" },
+                { name: "ADAPTATION", min: 101, max: 250, color: "#00d4ff" },
+                { name: "SPECIALIZATION", min: 251, max: 450, color: "#9d4edd" },
+                { name: "INTENSIFICATION", min: 451, max: 700, color: "#ff6b35" },
+                { name: "MASTERY", min: 701, max: 900, color: "#ffd700" },
+                { name: "ASCENSION", min: 901, max: 1000, color: "#ff0040" }
             ],
-            pull: [
-                { id: 'pullup', name: 'Pull-Up', tier: 2, baseReps: 5, muscles: ['back', 'arms'], xp: 15 },
-                { id: 'chinup', name: 'Chin-Up', tier: 2, baseReps: 6, muscles: ['back', 'arms'], xp: 15 },
-                { id: 'australian', name: 'Australian Pull-Up', tier: 1, baseReps: 10, muscles: ['back', 'arms'], xp: 10 },
-                { id: 'commando', name: 'Commando Pull-Up', tier: 3, baseReps: 4, muscles: ['back', 'arms'], xp: 20 },
-                { id: 'typewriter', name: 'Typewriter Pull-Up', tier: 4, baseReps: 3, muscles: ['back', 'arms'], xp: 30 },
-                { id: 'muscleup', name: 'Muscle-Up', tier: 4, baseReps: 2, muscles: ['back', 'chest', 'arms'], xp: 40 },
-                { id: 'archer', name: 'Archer Pull-Up', tier: 4, baseReps: 3, muscles: ['back', 'arms'], xp: 35 },
-                { id: 'onearm', name: 'One-Arm Pull-Up', tier: 6, baseReps: 1, muscles: ['back', 'arms', 'core'], xp: 100 },
-                { id: 'frontlever', name: 'Front Lever Row', tier: 5, baseReps: 3, muscles: ['back', 'core'], xp: 50 },
-                { id: 'icecream', name: 'Ice Cream Maker', tier: 5, baseReps: 4, muscles: ['back', 'core', 'arms'], xp: 45 }
-            ],
-            legs: [
-                { id: 'squat', name: 'Bodyweight Squat', tier: 1, baseReps: 20, muscles: ['legs'], xp: 10 },
-                { id: 'lunge', name: 'Walking Lunge', tier: 1, baseReps: 20, muscles: ['legs'], xp: 12 },
-                { id: 'bulgarian', name: 'Bulgarian Split Squat', tier: 2, baseReps: 12, muscles: ['legs'], xp: 18 },
-                { id: 'pistol', name: 'Pistol Squat', tier: 4, baseReps: 5, muscles: ['legs', 'core'], xp: 40 },
-                { id: 'shrimp', name: 'Shrimp Squat', tier: 3, baseReps: 8, muscles: ['legs'], xp: 25 },
-                { id: 'nordic', name: 'Nordic Curl', tier: 5, baseReps: 3, muscles: ['legs'], xp: 50 },
-                { id: 'sissy', name: 'Sissy Squat', tier: 3, baseReps: 10, muscles: ['legs'], xp: 22 },
-                { id: 'calf', name: 'Single-Leg Calf Raise', tier: 1, baseReps: 20, muscles: ['legs'], xp: 8 },
-                { id: 'glute', name: 'Single-Leg Glute Bridge', tier: 2, baseReps: 15, muscles: ['legs', 'core'], xp: 15 },
-                { id: 'natural', name: 'Natural Leg Extension', tier: 4, baseReps: 8, muscles: ['legs'], xp: 35 }
-            ],
-            core: [
-                { id: 'plank', name: 'Plank', tier: 1, baseReps: 45, unit: 'sec', muscles: ['core'], xp: 10 },
-                { id: 'hollow', name: 'Hollow Body Hold', tier: 2, baseReps: 30, unit: 'sec', muscles: ['core'], xp: 15 },
-                { id: 'legraise', name: 'Leg Raise', tier: 2, baseReps: 12, muscles: ['core'], xp: 15 },
-                { id: 'dragonflag', name: 'Dragon Flag', tier: 5, baseReps: 3, muscles: ['core'], xp: 50 },
-                { id: 'lsit', name: 'L-Sit', tier: 3, baseReps: 15, unit: 'sec', muscles: ['core', 'arms'], xp: 25 },
-                { id: 'humanflag', name: 'Human Flag', tier: 6, baseReps: 5, unit: 'sec', muscles: ['core', 'arms'], xp: 80 },
-                { id: 'frontlever', name: 'Front Lever', tier: 5, baseReps: 5, unit: 'sec', muscles: ['core', 'back'], xp: 60 },
-                { id: 'backlever', name: 'Back Lever', tier: 4, baseReps: 8, unit: 'sec', muscles: ['core', 'shoulders'], xp: 40 },
-                { id: 'windshield', name: 'Windshield Wiper', tier: 3, baseReps: 10, muscles: ['core'], xp: 20 },
-                { id: 'toetouch', name: 'V-Up', tier: 2, baseReps: 15, muscles: ['core'], xp: 12 }
+            RANKS: [
+                { name: "E", level: 1, title: "Novice Hunter" },
+                { name: "D", level: 15, title: "Beginner Hunter" },
+                { name: "C", level: 30, title: "Intermediate Hunter" },
+                { name: "B", level: 50, title: "Advanced Hunter" },
+                { name: "A", level: 75, title: "Elite Hunter" },
+                { name: "S", level: 100, title: "Shadow Monarch" }
             ]
         };
 
-        const TIERS = {
-            1: { name: 'Fundamental', color: '#9ca3af', unlockLevel: 1 },
-            2: { name: 'Beginner', color: '#22c55e', unlockLevel: 5 },
-            3: { name: 'Intermediate', color: '#3b82f6', unlockLevel: 15 },
-            4: { name: 'Advanced', color: '#a855f7', unlockLevel: 30 },
-            5: { name: 'Elite', color: '#f59e0b', unlockLevel: 50 },
-            6: { name: 'Master', color: '#ef4444', unlockLevel: 75 }
+        let hunter = {
+            name: "Hunter", title: "The One Who Overcame Adversity", level: 1, xp: 0, rank: "E", job: "Novice Hunter", phase: 1,
+            hp: 100, maxHp: 100, mp: 100, maxMp: 100, fatigue: 0, gold: 0,
+            stats: { str: 10, vit: 10, agi: 10, int: 10, per: 10 }, ap: 0,
+            streak: 0, discipline: 100, lastActive: null,
+            bodyStatus: {
+                head: { status: 'normal', fatigue: 0 }, neck: { status: 'normal', fatigue: 0 },
+                shoulders: { status: 'normal', fatigue: 0 }, chest: { status: 'normal', fatigue: 0 },
+                abs: { status: 'normal', fatigue: 0 }, arms: { status: 'normal', fatigue: 0 },
+                back: { status: 'normal', fatigue: 0 }, legs: { status: 'normal', fatigue: 0 }
+            },
+            dailyProtocol: null, protocolHistory: []
         };
 
-        let state = {
-            level: 1,
-            xp: 0,
-            rank: 'BEGINNER',
-            gold: 0,
-            streak: 0,
-            energy: 100,
-            
-            skills: {
-                pushup: { level: 1, xp: 0, maxReps: 10 },
-                pullup: { level: 1, xp: 0, maxReps: 5 },
-                squat: { level: 1, xp: 0, maxReps: 20 },
-                dip: { level: 1, xp: 0, maxReps: 8 },
-                core: { level: 1, xp: 0, maxReps: 45 },
-                cardio: { level: 1, xp: 0, maxReps: 1000 }
-            },
-            
-            muscleFatigue: {
-                chest: 0, shoulders: 0, arms: 0, back: 0,
-                core: 0, legs: 0, neck: 0
-            },
-            
-            currentTab: 'push',
-            lastWorkout: null
+        const QUEST_DB = {
+            strength: [
+                { name: "Push-up Protocol", baseReps: 20, unit: "reps", fatigue: 25, muscles: ["chest", "arms", "shoulders"] },
+                { name: "Squat Sequence", baseReps: 30, unit: "reps", fatigue: 25, muscles: ["legs"] },
+                { name: "Pull-up Power", baseReps: 10, unit: "reps", fatigue: 30, muscles: ["back", "arms"] },
+                { name: "Core Crusher", baseReps: 60, unit: "seconds", fatigue: 20, muscles: ["abs"] }
+            ],
+            agility: [
+                { name: "Sprint Intervals", baseReps: 10, unit: "x100m", fatigue: 20, muscles: ["legs"] },
+                { name: "Shadowboxing", baseReps: 3, unit: "rounds", fatigue: 20, muscles: ["arms", "shoulders"] },
+                { name: "5K Run", baseReps: 5, unit: "km", fatigue: 25, muscles: ["legs"] },
+                { name: "Reaction Drill", baseReps: 10, unit: "minutes", fatigue: 15, muscles: ["head"] }
+            ],
+            intelligence: [
+                { name: "Deep Reading", baseReps: 20, unit: "pages", fatigue: 5, muscles: ["head"] },
+                { name: "Creative Writing", baseReps: 300, unit: "words", fatigue: 5, muscles: ["head"] },
+                { name: "Skill Study", baseReps: 30, unit: "minutes", fatigue: 5, muscles: ["head"] },
+                { name: "Journaling", baseReps: 500, unit: "words", fatigue: 5, muscles: ["head"] }
+            ],
+            recovery: [
+                { name: "Yoga Flow", baseReps: 20, unit: "minutes", fatigue: -30, muscles: ["abs", "legs", "back"] },
+                { name: "Stretching Protocol", baseReps: 15, unit: "minutes", fatigue: -25, muscles: ["all"] },
+                { name: "Meditation", baseReps: 15, unit: "minutes", fatigue: -20, muscles: ["head"] },
+                { name: "Cold Shower", baseReps: 3, unit: "minutes", fatigue: -15, muscles: ["all"] }
+            ]
         };
 
         function init() {
             loadData();
-            updateUI();
-            renderExercises();
-            setupMuscleTooltips();
             checkDailyReset();
+            updateUI();
+            setupInteractions();
+            if (!hunter.dailyProtocol || isNewDay()) generateDailyProtocol();
         }
 
         function loadData() {
-            const saved = localStorage.getItem('calisthenics_system_v1');
-            if (saved) state = { ...state, ...JSON.parse(saved) };
+            const saved = localStorage.getItem('soloLeveling_v3');
+            if (saved) hunter = { ...hunter, ...JSON.parse(saved) };
         }
 
         function saveData() {
-            localStorage.setItem('calisthenics_system_v1', JSON.stringify(state));
+            localStorage.setItem('soloLeveling_v3', JSON.stringify(hunter));
         }
 
-        function xpForLevel(level) {
-            return Math.floor(100 * Math.pow(level, 1.4));
+        function xpRequired(level) {
+            return Math.floor(100 * Math.pow(level, 1.5));
         }
 
-        function getTargetReps(exercise) {
-            const skill = state.skills[exercise.id] || state.skills[getSkillKey(exercise.id)];
-            if (!skill) return exercise.baseReps;
-            
-            // Smooth progression: each skill level adds ~5% to base
-            const multiplier = 1 + (skill.level - 1) * 0.05;
-            return Math.floor(exercise.baseReps * multiplier);
+        function getCurrentPhase() {
+            return SYSTEM_CONFIG.PHASES.find(p => hunter.level >= p.min && hunter.level <= p.max) || SYSTEM_CONFIG.PHASES[0];
         }
 
-        function getSkillKey(exerciseId) {
-            if (['pushup', 'diamond', 'wide', 'pike', 'archerpush', 'pseudo', 'handstand', 'planche', 'maltese', 'dips'].includes(exerciseId)) return 'pushup';
-            if (['pullup', 'chinup', 'australian', 'commando', 'typewriter', 'muscleup', 'archerpull', 'onearm', 'frontleverpull', 'icecream'].includes(exerciseId)) return 'pullup';
-            if (['squat', 'lunge', 'bulgarian', 'pistol', 'shrimp', 'nordic', 'sissy', 'calf', 'glute', 'natural'].includes(exerciseId)) return 'squat';
-            if (['dip'].includes(exerciseId)) return 'dip';
-            return 'core';
-        }
-
-        function isUnlocked(exercise) {
-            return state.level >= TIERS[exercise.tier].unlockLevel;
-        }
-
-        function canPerform(exercise) {
-            // Check muscle fatigue
-            for (let muscle of exercise.muscles) {
-                if (state.muscleFatigue[muscle] >= 80) return false;
+        function getCurrentRank() {
+            for (let i = SYSTEM_CONFIG.RANKS.length - 1; i >= 0; i--) {
+                if (hunter.level >= SYSTEM_CONFIG.RANKS[i].level) return SYSTEM_CONFIG.RANKS[i];
             }
-            return state.energy >= 10;
-        }
-
-        function performExercise(exerciseId) {
-            const exercise = Object.values(EXERCISE_DB).flat().find(e => e.id === exerciseId);
-            if (!exercise || !isUnlocked(exercise)) return;
-
-            const targetReps = getTargetReps(exercise);
-            
-            // Calculate rewards
-            const xpGain = Math.floor(exercise.xp * (1 + exercise.tier * 0.2));
-            const skillKey = getSkillKey(exerciseId);
-            
-            // Add skill XP
-            if (state.skills[skillKey]) {
-                state.skills[skillKey].xp += xpGain;
-                // Skill level up
-                while (state.skills[skillKey].xp >= xpForLevel(state.skills[skillKey].level)) {
-                    state.skills[skillKey].xp -= xpForLevel(state.skills[skillKey].level);
-                    state.skills[skillKey].level++;
-                    state.skills[skillKey].maxReps = Math.floor(state.skills[skillKey].maxReps * 1.05);
-                }
-            }
-            
-            // Add global XP
-            addXP(xpGain);
-            
-            // Apply fatigue
-            exercise.muscles.forEach(muscle => {
-                state.muscleFatigue[muscle] = Math.min(100, state.muscleFatigue[muscle] + 15);
-            });
-            state.energy = Math.max(0, state.energy - 10);
-            
-            // Gold reward
-            state.gold += Math.floor(exercise.tier * 2);
-            
-            state.lastWorkout = new Date().toISOString();
-            
-            saveData();
-            updateUI();
-            renderExercises();
-            
-            showNotification(`Completed: ${exercise.name} x${targetReps}`, xpGain);
+            return SYSTEM_CONFIG.RANKS[0];
         }
 
         function addXP(amount) {
-            state.xp += amount;
-            while (state.xp >= xpForLevel(state.level) && state.level < 100) {
-                state.xp -= xpForLevel(state.level);
-                state.level++;
-                updateRank();
+            if (hunter.discipline < 50) amount *= 0.8;
+            if (hunter.discipline > 90) amount *= 1.2;
+            hunter.xp += Math.floor(amount);
+            while (hunter.xp >= xpRequired(hunter.level) && hunter.level < SYSTEM_CONFIG.MAX_LEVEL) {
+                hunter.xp -= xpRequired(hunter.level);
+                levelUp();
             }
-        }
-
-        function updateRank() {
-            if (state.level >= 75) state.rank = 'MASTER';
-            else if (state.level >= 50) state.rank = 'ELITE';
-            else if (state.level >= 30) state.rank = 'ADVANCED';
-            else if (state.level >= 15) state.rank = 'INTERMEDIATE';
-            else if (state.level >= 5) state.rank = 'BEGINNER';
-            else state.rank = 'NOVICE';
-        }
-
-        function rest() {
-            // Recovery
-            Object.keys(state.muscleFatigue).forEach(muscle => {
-                state.muscleFatigue[muscle] = Math.max(0, state.muscleFatigue[muscle] - 40);
-            });
-            state.energy = Math.min(100, state.energy + 50);
-            
             saveData();
             updateUI();
-            renderExercises();
-            showNotification('Rest complete - Fatigue reduced', 0);
         }
 
-        function switchTab(tab) {
-            state.currentTab = tab;
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            renderExercises();
+        function levelUp() {
+            hunter.level++;
+            hunter.ap += 5;
+            hunter.maxHp += 5;
+            hunter.maxMp += 3;
+            hunter.hp = hunter.maxHp;
+            hunter.mp = hunter.maxMp;
+            const rank = getCurrentRank();
+            if (rank.name !== hunter.rank) {
+                hunter.rank = rank.name;
+                hunter.job = rank.title;
+                showAlert(`RANK UP!`, [{ icon: '👑', value: rank.name + '-RANK', label: 'RANK' }]);
+            }
+            if (hunter.level % 10 === 0) hunter.gold += 50;
         }
 
-        function renderExercises() {
-            const container = document.getElementById('exerciseContainer');
-            const exercises = EXERCISE_DB[state.currentTab] || [];
-            
-            let html = '';
-            
-            exercises.forEach(exercise => {
-                const unlocked = isUnlocked(exercise);
-                const canDo = canPerform(exercise);
-                const targetReps = getTargetReps(exercise);
-                const tier = TIERS[exercise.tier];
-                
-                html += `
-                    <div class="exercise-card ${!unlocked ? 'locked' : ''}">
-                        <div class="exercise-header">
-                            <div class="exercise-name">${exercise.name}</div>
-                            <div class="exercise-tier tier-${exercise.tier}">T${exercise.tier}</div>
-                        </div>
-                        <div class="exercise-target">
-                            <div>
-                                <div class="target-display">${unlocked ? targetReps : '?'}</div>
-                                <div class="target-label">${exercise.unit || 'reps'}</div>
-                            </div>
-                            <div style="flex: 1;">
-                                <div style="font-size: 0.85rem; color: var(--dim); margin-bottom: 5px;">
-                                    ${unlocked ? tier.name : `Unlock at Level ${tier.unlockLevel}`}
-                                </div>
-                                <div class="exercise-muscles">
-                                    ${exercise.muscles.map(m => `<span class="muscle-tag" style="color: var(--muscle-${m})">${m}</span>`).join('')}
-                                </div>
-                            </div>
-                        </div>
-                        ${unlocked ? `
-                            <div class="exercise-actions">
-                                <button class="btn btn-primary" onclick="performExercise('${exercise.id}')" ${!canDo ? 'disabled' : ''}>
-                                    ${!canDo ? 'FATIGUED' : 'COMPLETE'}
-                                </button>
-                                ${exercise.tier >= 3 ? `<button class="btn btn-secondary" onclick="performExercise('${exercise.id}')" ${!canDo ? 'disabled' : ''}>-1 REP</button>` : ''}
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
+        function applyFatigue(type, baseAmount) {
+            const scaled = baseAmount * (1 + hunter.level * 0.01);
+            const rankMultipliers = { E: 1, D: 1.1, C: 1.2, B: 1.3, A: 1.4, S: 1.5 };
+            const multiplier = rankMultipliers[hunter.rank] || 1;
+            const finalAmount = Math.floor(scaled * multiplier);
+            if (type === 'recovery') hunter.fatigue = Math.max(0, hunter.fatigue + finalAmount);
+            else hunter.fatigue = Math.min(100, hunter.fatigue + finalAmount);
+            updateBodyStatus();
+            return finalAmount;
+        }
+
+        function updateBodyStatus() {
+            Object.keys(hunter.bodyStatus).forEach(part => {
+                const status = hunter.bodyStatus[part];
+                if (status.fatigue >= 80) status.status = 'injured';
+                else if (status.fatigue >= 50) status.status = 'fatigue';
+                else if (status.fatigue >= 30) status.status = 'active';
+                else status.status = 'normal';
             });
-            
-            // Add rest button
-            html += `
-                <button class="btn btn-secondary" onclick="rest()" style="width: 100%; margin-top: 10px;">
-                    🧘 REST & RECOVER (-40% Fatigue)
-                </button>
-            `;
-            
-            container.innerHTML = html;
+        }
+
+        function canPerformQuest(type) {
+            return !(hunter.fatigue >= 80 && type !== 'recovery');
+        }
+
+        function generateDailyProtocol() {
+            const scaleValue = (base) => Math.floor(base * (1 + hunter.level * 0.05));
+            const protocol = { date: new Date().toDateString(), quests: [], completed: 0 };
+
+            ['strength', 'agility', 'intelligence', 'recovery'].forEach(category => {
+                const templates = QUEST_DB[category];
+                const template = templates[Math.floor(Math.random() * templates.length)];
+                protocol.quests.push({
+                    id: Date.now() + Math.random(), category: category, name: template.name,
+                    desc: `${scaleValue(template.baseReps)} ${template.unit}`,
+                    target: scaleValue(template.baseReps), unit: template.unit,
+                    fatigue: template.fatigue, muscles: template.muscles, completed: false,
+                    rewards: calculateRewards(category, hunter.level)
+                });
+            });
+
+            hunter.dailyProtocol = protocol;
+            saveData();
+            updateProtocolUI();
+        }
+
+        function calculateRewards(category, level) {
+            const baseXP = 50;
+            const scaledXP = Math.floor(baseXP * (1 + level * 0.08));
+            const rewards = { xp: scaledXP, gold: Math.floor(scaledXP / 5) };
+            const gain = Math.max(1, Math.floor(2 / (1 + level * 0.01)));
+            if (category === 'strength') rewards.str = gain;
+            if (category === 'agility') rewards.agi = gain;
+            if (category === 'intelligence') rewards.int = gain;
+            if (category === 'recovery') rewards.vit = 1;
+            return rewards;
+        }
+
+        function completeQuest(questId) {
+            const quest = hunter.dailyProtocol.quests.find(q => q.id === questId);
+            if (!quest || quest.completed) return;
+            if (!canPerformQuest(quest.category)) {
+                showAlert("FATIGUE TOO HIGH<br>Complete recovery quest first!", []);
+                return;
+            }
+
+            applyFatigue(quest.category === 'recovery' ? 'recovery' : 'active', quest.fatigue);
+            quest.muscles.forEach(muscle => {
+                if (hunter.bodyStatus[muscle]) {
+                    hunter.bodyStatus[muscle].fatigue = Math.min(100, hunter.bodyStatus[muscle].fatigue + Math.abs(quest.fatigue) * 0.5);
+                }
+            });
+
+            addXP(quest.rewards.xp);
+            hunter.gold += quest.rewards.gold;
+            if (quest.rewards.str) hunter.stats.str += quest.rewards.str;
+            if (quest.rewards.agi) hunter.stats.agi += quest.rewards.agi;
+            if (quest.rewards.int) hunter.stats.int += quest.rewards.int;
+            if (quest.rewards.vit) hunter.stats.vit += quest.rewards.vit;
+
+            quest.completed = true;
+            hunter.dailyProtocol.completed++;
+            if (hunter.dailyProtocol.completed === hunter.dailyProtocol.quests.length) {
+                hunter.streak++;
+                hunter.discipline = Math.min(100, hunter.discipline + 5);
+            }
+
+            const rewardItems = [
+                { icon: '⭐', value: '+' + quest.rewards.xp, label: 'XP' },
+                { icon: '🪙', value: '+' + quest.rewards.gold, label: 'GOLD' }
+            ];
+            if (quest.rewards.str) rewardItems.push({ icon: '💪', value: '+' + quest.rewards.str, label: 'STR' });
+            if (quest.rewards.agi) rewardItems.push({ icon: '🏃', value: '+' + quest.rewards.agi, label: 'AGI' });
+            if (quest.rewards.int) rewardItems.push({ icon: '🧠', value: '+' + quest.rewards.int, label: 'INT' });
+            if (quest.rewards.vit) rewardItems.push({ icon: '❤️', value: '+' + quest.rewards.vit, label: 'VIT' });
+
+            showAlert(`QUEST COMPLETE<br>${quest.name}`, rewardItems);
+            saveData();
+            updateUI();
+        }
+
+        function skipQuest(questId) {
+            hunter.discipline = Math.max(0, hunter.discipline - 10);
+            hunter.streak = 0;
+            const quest = hunter.dailyProtocol.quests.find(q => q.id === questId);
+            if (quest) quest.skipped = true;
+            saveData();
+            updateProtocolUI();
+            showAlert("QUEST SKIPPED<br>Discipline decreased", []);
         }
 
         function updateUI() {
-            document.getElementById('levelDisplay').textContent = state.level;
-            document.getElementById('rankDisplay').textContent = state.rank;
-            document.getElementById('goldDisplay').textContent = state.gold;
-            document.getElementById('streakDisplay').textContent = state.streak;
-            document.getElementById('energyDisplay').textContent = state.energy + '%';
-            
-            // XP bar
-            const xpNeeded = xpForLevel(state.level);
-            document.getElementById('xpBar').style.width = (state.xp / xpNeeded * 100) + '%';
-            document.getElementById('xpText').textContent = `${state.xp} / ${xpNeeded} XP`;
-            
-            // Skills
-            Object.keys(state.skills).forEach(skill => {
-                const data = state.skills[skill];
-                const el = document.getElementById(skill + 'Level');
-                const progress = document.getElementById(skill + 'Progress');
-                if (el) {
-                    el.textContent = 'Lv.' + data.level;
-                    const xpNeeded = xpForLevel(data.level);
-                    if (progress) progress.style.width = (data.xp / xpNeeded * 100) + '%';
-                }
-            });
-            
-            // Muscle visualization
-            updateMuscleVisuals();
-            
-            // Fatigue alert
-            const maxFatigue = Math.max(...Object.values(state.muscleFatigue));
-            const alert = document.getElementById('fatigueAlert');
-            if (maxFatigue >= 80) alert.classList.add('active');
-            else alert.classList.remove('active');
+            document.getElementById('levelDisplay').textContent = hunter.level;
+            document.getElementById('rankDisplay').textContent = hunter.rank + '-RANK';
+            document.getElementById('jobDisplay').textContent = hunter.job;
+            document.getElementById('goldDisplay').textContent = hunter.gold;
+            document.getElementById('streakDisplay').textContent = hunter.streak;
+            document.getElementById('disciplineDisplay').textContent = hunter.discipline;
+
+            const phase = getCurrentPhase();
+            document.getElementById('phaseIndicator').textContent = `PHASE ${SYSTEM_CONFIG.PHASES.indexOf(phase) + 1}: ${phase.name}`;
+            document.getElementById('phaseIndicator').style.color = phase.color;
+            document.getElementById('phaseIndicator').style.borderColor = phase.color;
+
+            const xpNeeded = xpRequired(hunter.level);
+            document.getElementById('xpBar').style.width = ((hunter.xp / xpNeeded) * 100) + '%';
+            document.getElementById('xpText').textContent = `${hunter.xp} / ${xpNeeded} XP`;
+
+            document.getElementById('hpBar').style.width = (hunter.hp / hunter.maxHp * 100) + '%';
+            document.getElementById('hpText').textContent = `${hunter.hp}/${hunter.maxHp}`;
+            document.getElementById('mpBar').style.width = (hunter.mp / hunter.maxMp * 100) + '%';
+            document.getElementById('mpText').textContent = `${hunter.mp}/${hunter.maxMp}`;
+            document.getElementById('fatigueBar').style.width = hunter.fatigue + '%';
+            document.getElementById('fatigueText').textContent = `${hunter.fatigue}/100`;
+
+            document.getElementById('strValue').textContent = hunter.stats.str;
+            document.getElementById('vitValue').textContent = hunter.stats.vit;
+            document.getElementById('agiValue').textContent = hunter.stats.agi;
+            document.getElementById('intValue').textContent = hunter.stats.int;
+            document.getElementById('perValue').textContent = hunter.stats.per;
+            document.getElementById('apValue').textContent = hunter.ap;
+
+            const warning = document.getElementById('fatigueWarning');
+            if (hunter.fatigue >= 80) warning.classList.add('active');
+            else warning.classList.remove('active');
+
+            updateBodyVisuals();
+            updateProtocolUI();
         }
 
-        function updateMuscleVisuals() {
-            document.querySelectorAll('.muscle-group').forEach(el => {
-                const muscle = el.dataset.muscle;
-                const fatigue = state.muscleFatigue[muscle] || 0;
-                
-                el.classList.remove('muscle-fatigue-0', 'muscle-fatigue-1', 'muscle-fatigue-2', 'muscle-fatigue-3');
-                
-                if (fatigue >= 80) el.classList.add('muscle-fatigue-3');
-                else if (fatigue >= 50) el.classList.add('muscle-fatigue-2');
-                else if (fatigue >= 25) el.classList.add('muscle-fatigue-1');
-                else el.classList.add('muscle-fatigue-0');
+        function updateBodyVisuals() {
+            document.querySelectorAll('.body-part').forEach(part => {
+                const partName = part.dataset.part;
+                const status = hunter.bodyStatus[partName];
+                if (!status) return;
+                part.classList.remove('status-normal', 'status-active', 'status-fatigue', 'status-injured');
+                part.classList.add('status-' + status.status);
             });
         }
 
-        function setupMuscleTooltips() {
-            const tooltip = document.getElementById('muscleTooltip');
-            
-            document.querySelectorAll('.muscle-group').forEach(el => {
-                el.addEventListener('mouseenter', (e) => {
-                    const muscle = e.target.dataset.muscle;
-                    const fatigue = state.muscleFatigue[muscle] || 0;
-                    let status = 'FRESH';
-                    if (fatigue >= 80) status = 'CRITICAL';
-                    else if (fatigue >= 50) status = 'FATIGUED';
-                    else if (fatigue >= 25) status = 'WARMED';
-                    
-                    tooltip.innerHTML = `<strong>${muscle.toUpperCase()}</strong><br>Fatigue: ${fatigue}%<br>Status: ${status}`;
-                    tooltip.classList.add('active');
-                });
-                
-                el.addEventListener('mousemove', (e) => {
-                    tooltip.style.left = e.pageX + 15 + 'px';
-                    tooltip.style.top = e.pageY + 15 + 'px';
-                });
-                
-                el.addEventListener('mouseleave', () => {
-                    tooltip.classList.remove('active');
-                });
-            });
+        function updateProtocolUI() {
+            if (!hunter.dailyProtocol) return;
+            const container = document.getElementById('protocolContainer');
+            const completed = hunter.dailyProtocol.quests.filter(q => q.completed).length;
+            document.getElementById('protocolProgress').textContent = `${completed}/${hunter.dailyProtocol.quests.length}`;
+
+            const categoryIcons = { strength: '💪', agility: '🏃', intelligence: '🧠', recovery: '🧘' };
+
+            container.innerHTML = hunter.dailyProtocol.quests.map(quest => {
+                const isBlocked = !canPerformQuest(quest.category) && !quest.completed;
+                const isSkipped = quest.skipped;
+                return `
+                    <div class="quest-category">
+                        <div class="category-header">
+                            <span class="category-icon">${categoryIcons[quest.category]}</span>
+                            <span>${quest.category.toUpperCase()}</span>
+                        </div>
+                        <div class="quest-card ${quest.completed ? 'completed' : ''} ${isBlocked ? 'blocked' : ''} ${isSkipped ? 'blocked' : ''}">
+                            <div class="quest-header">
+                                <span class="quest-name">${quest.name}</span>
+                                <span class="quest-difficulty" style="color: ${isBlocked ? 'var(--alert-red)' : 'var(--system-blue)'}; border-color: ${isBlocked ? 'var(--alert-red)' : 'var(--system-blue)'}">${isSkipped ? 'SKIPPED' : isBlocked ? 'BLOCKED' : quest.completed ? 'DONE' : 'ACTIVE'}</span>
+                            </div>
+                            <div class="quest-desc">${quest.desc}</div>
+                            <div class="quest-impact">
+                                <span class="impact-item impact-positive">XP +${quest.rewards.xp}</span>
+                                <span class="impact-item impact-positive">🪙 +${quest.rewards.gold}</span>
+                                ${quest.fatigue > 0 ? `<span class="impact-item impact-negative">FATIGUE +${quest.fatigue}</span>` : `<span class="impact-item impact-positive">RECOVERY ${quest.fatigue}</span>`}
+                            </div>
+                            ${!quest.completed && !isSkipped ? `
+                                <div class="quest-actions">
+                                    <button class="btn-system complete" onclick="completeQuest(${quest.id})" ${isBlocked ? 'disabled' : ''}>${isBlocked ? 'RECOVERY REQUIRED' : 'COMPLETE'}</button>
+                                    <button class="btn-system" onclick="skipQuest(${quest.id})">SKIP</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function isNewDay() {
+            if (!hunter.dailyProtocol) return true;
+            return hunter.dailyProtocol.date !== new Date().toDateString();
         }
 
         function checkDailyReset() {
-            if (!state.lastWorkout) return;
-            
-            const last = new Date(state.lastWorkout);
-            const now = new Date();
-            const diffDays = Math.floor((now - last) / (1000 * 60 * 60 * 24));
-            
-            if (diffDays >= 1) {
-                // Passive recovery
-                Object.keys(state.muscleFatigue).forEach(muscle => {
-                    state.muscleFatigue[muscle] = Math.max(0, state.muscleFatigue[muscle] - (diffDays * 20));
+            if (isNewDay()) {
+                hunter.fatigue = Math.max(0, hunter.fatigue - 40);
+                Object.keys(hunter.bodyStatus).forEach(part => {
+                    hunter.bodyStatus[part].fatigue = Math.max(0, hunter.bodyStatus[part].fatigue - 30);
                 });
-                state.energy = Math.min(100, state.energy + (diffDays * 30));
-                
-                if (diffDays === 1) state.streak++;
-                else if (diffDays > 1) state.streak = 0;
-                
-                saveData();
-                updateUI();
+                if (hunter.lastActive) {
+                    const lastDate = new Date(hunter.lastActive);
+                    const today = new Date();
+                    const diffDays = Math.floor((today - lastDate) / (1000 * 60 * 60 * 24));
+                    if (diffDays > 1) {
+                        hunter.discipline = Math.max(0, hunter.discipline - (diffDays * 10));
+                        hunter.streak = 0;
+                    }
+                }
+                hunter.lastActive = new Date().toISOString();
             }
         }
 
-        function showNotification(message, xp) {
-            // Simple notification - could be enhanced
-            console.log(message, xp > 0 ? `+${xp} XP` : '');
+        function setupInteractions() {
+            document.querySelectorAll('.body-part').forEach(part => {
+                part.addEventListener('click', () => {
+                    const partName = part.dataset.part;
+                    const status = hunter.bodyStatus[partName];
+                    showAlert(`${partName.toUpperCase()} STATUS<br>Fatigue: ${status.fatigue}%<br>Status: ${status.status.toUpperCase()}`, []);
+                });
+            });
         }
 
-        // Modal functions
+        function showAlert(message, rewards) {
+            document.getElementById('alertMessage').innerHTML = message;
+            const rewardsDiv = document.getElementById('alertRewards');
+            if (rewards.length > 0) {
+                rewardsDiv.innerHTML = rewards.map(r => `<div class="reward-item"><div class="reward-icon">${r.icon}</div><div class="reward-value">${r.value}</div><div style="font-size: 0.7rem; color: var(--system-dim);">${r.label}</div></div>`).join('');
+                rewardsDiv.style.display = 'flex';
+            } else {
+                rewardsDiv.style.display = 'none';
+            }
+            document.getElementById('modalOverlay').classList.add('active');
+            document.getElementById('systemAlert').classList.add('active');
+        }
+
+        function closeAlert() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.getElementById('systemAlert').classList.remove('active');
+        }
+
         function openGoldModal() {
-            document.getElementById('goldInput').value = state.gold;
+            document.getElementById('goldInput').value = hunter.gold;
             document.getElementById('modalOverlay').classList.add('active');
             document.getElementById('goldModal').classList.add('active');
         }
@@ -1133,7 +667,7 @@
         }
 
         function updateGold() {
-            state.gold = parseInt(document.getElementById('goldInput').value) || 0;
+            hunter.gold = parseInt(document.getElementById('goldInput').value) || 0;
             saveData();
             updateUI();
             closeGoldModal();
